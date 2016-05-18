@@ -9,7 +9,10 @@ apt
 #### vars
 
    manage_apt: true
+
+if the proxy is available, it get included in apt-conf, otherwise it is ignored
    apt_proxy_url: http://configserver01:9999
+
    apt_default_release: jessie
    apt_release: "{{ apt_default_release }}"
    apt_do_update_list: true
