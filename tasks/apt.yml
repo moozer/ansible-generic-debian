@@ -1,0 +1,43 @@
+# tasks file for common-debian
+
+# for this to work, certain things must work
+#  apt_release must be valid in the *current* sources list
+#  apt-get update must work without errors
+#  python-apt must be installed: apt-get install python-apt
+#    if you still get "import apt_pkf failed"
+#    try apt-get install and apt-get remove
+# Error like: W: There is no public key available for the following key IDs:
+#    apt-get install debian-archive-keyring
+# also check for stale apt-pinning
+
+- name: apt configurations
+  template: src=apt.conf.j2 dest="/etc/apt/apt.conf"
+  tags: apt
+
+- name: install apt sources
+  apt_repository: repo='{{ item }}' state=present
+  with_items:
+  - "deb http://security.debian.org/ {{ apt_release }}/updates main non-free contrib"
+  - "deb http://cdn.debian.net/debian/ {{ apt_release }} main non-free contrib"
+  - "deb http://cdn.debian.net/debian/ {{ apt_release }}-updates main"
+  - "deb http://cdn.debian.net/debian/ {{ apt_release }}-backports main"
+  tags: apt
+
+- name: install apt sources (testing)
+  apt_repository: repo='{{ item }}' state=present
+  with_items:
+  - "deb http://security.debian.org/ testing/updates main non-free contrib"
+  - "deb http://cdn.debian.net/debian/ testing main non-free contrib"
+  - "deb http://cdn.debian.net/debian/ testing-updates main"
+  tags: apt
+  when: apt_include_testing
+
+- name: updating package list
+  apt: update_cache=yes cache_valid_time=3600
+  when: apt_do_update_list
+  tags: apt
+
+- name: Upgrade packages
+  apt: upgrade=full
+  when: apt_do_upgrades
+  tags: apt

@@ -1,0 +1,11 @@
+#
+# 
+#
+
+- name: installing unattended upgrades
+  include: unattended-upgrades.yml
+  when: enable_unattended_upgrade
+
+- name: add repositories and update
+  include: apt.yml
+  when: manage_apt
