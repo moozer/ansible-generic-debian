@@ -10,7 +10,7 @@ apt
 
    manage_apt: true
 
-if the proxy is available, it get included in apt-conf, otherwise it is ignored
+if the proxy var is not empty, it gets included in apt.conf
    apt_proxy_url: http://configserver01:9999
 
    apt_default_release: jessie
