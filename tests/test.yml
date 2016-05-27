@@ -5,8 +5,5 @@
   roles:
   - generic-debian
 
-  vars:
-  - include: vars.yml
-
   tasks:
   - debug: var=ansible_hostname
