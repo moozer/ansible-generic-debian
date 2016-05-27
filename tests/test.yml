@@ -1,0 +1,12 @@
+- hosts: all
+  become: yes
+  user: vagrant
+
+  roles:
+  - generic-debian
+
+  vars:
+  - include: vars.yml
+
+  tasks:
+  - debug: var=ansible_hostname

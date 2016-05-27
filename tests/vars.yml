@@ -1,0 +1,6 @@
+# minimum for apt
+apt_proxy_url: http://configserver01:9999
+apt_default_release: jessie
+apt_do_update_list: true
+apt_include_testing: false
+
