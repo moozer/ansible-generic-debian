@@ -3,6 +3,8 @@ generic-debian
 
 this role replaces having single playbooks.
 
+see the [test](tests/) directory for minimal usage.
+
 apt
 ---------
 
