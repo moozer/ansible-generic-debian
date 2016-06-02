@@ -1,7 +1,7 @@
 # apt-conf
 
 {# add proxy if applicable #}
-{% if apt_proxy_url is defined %}
+{% if apt_proxy_url %}
 Acquire::http::Proxy "{{ apt_proxy_url }}";
 {% else %}
 #Acquire::http::Proxy "http://someserver:9999";
