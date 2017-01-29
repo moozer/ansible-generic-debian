@@ -1,9 +1,9 @@
 generic-debian
 =================
 
-this role replaces having single playbooks.
+This role replaces having single playbooks for generic debian tasks.
 
-see the [test](tests/) directory for minimal usage.
+See the [test](tests/) directory for minimal usage.
 
 apt
 ---------
@@ -26,7 +26,7 @@ if the proxy var is not empty, it gets included in apt.conf
 Does upgrade of all packages, not recommended for normal use
 Perhaps a candidate for --extra-vars
 
-    apt_do_upgrades: false 
+    apt_do_upgrades: false
 
 
 unattended-upgrades
@@ -38,7 +38,24 @@ Currently it is security updates that gets updated
 
 #### vars
 
-Disables of enables unattended upgrades
+Disables or enables unattended upgrades
 
     enable_unattended_upgrade: true
 
+ldap
+-----------
+
+Enable ldap lookups for users
+
+#### vars
+
+Disables or enables ldap use
+
+  use_ldap: false
+
+ldap server parameters
+
+  ldap_uri: ldap://someldapserver
+  ldap_basedc: dc=mydomain,dc=cm
+  ldap_binddn:  cn=admin,dcmydomain,dc=com
+  ldap_bindpw: somepassword
