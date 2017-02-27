@@ -1,24 +1,24 @@
 # adds the necesary packages and config
 # to use ldap authentication
 
-- name: apt-get update (if applicable)
-  apt:
-    update_cache: yes
-    cache_valid_time: 3600
-
-- name: install ldap pam packages
+- name: install ldap related packages
   apt: name={{ item }} state=present
   with_items:
   - libpam-ldapd
+  - nscd
+  - nslcd
+  tags: ldap
 
 - name: replace /etc/nsswitch.conf
   template: src=ldap/nsswitch.conf.j2 dest=/etc/nsswitch.conf
   notify:
   - restart nslcd
   - restart nscd
+  tags: ldap
 
 - name: replace /etc/nslcd.conf
   template: src=ldap/nslcd.conf.j2 dest=/etc/nslcd.conf
   notify:
   - restart nslcd
   - restart nscd
+  tags: ldap
