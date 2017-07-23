@@ -1,0 +1,19 @@
+    # unattended upgrades
+    enable_unattended_upgrade: true
+
+    # apt.yml relates
+    manage_apt: true
+    apt_proxy_url: http://configserver01:9999
+    apt_default_release: jessie
+    apt_release: "{{ apt_default_release }}"
+    apt_do_update_list: true
+    apt_include_testing: false
+
+    apt_do_upgrades: false # perhaps a candidate for --extra-vars
+
+    # for ldap
+    use_ldap: false
+    ldap_uri: ldap://someldapserver
+    ldap_basedc: dc=mydomain,dc=cm
+    ldap_binddn:  cn=admin,dcmydomain,dc=com
+    ldap_bindpw: somepassword
