@@ -14,21 +14,21 @@
   template: src=apt.conf.j2 dest="/etc/apt/apt.conf"
   tags: apt
 
-- name: install apt sources
+- name: install apt sources stable ({{apt_current_stable}})
   apt_repository: repo='{{ item }}' state=present
   with_items:
-  - "deb http://security.debian.org/ {{ apt_release }}/updates main non-free contrib"
-  - "deb http://cdn.debian.net/debian/ {{ apt_release }} main non-free contrib"
-  - "deb http://cdn.debian.net/debian/ {{ apt_release }}-updates main"
-  - "deb http://cdn.debian.net/debian/ {{ apt_release }}-backports main"
+  - "deb http://security.debian.org/ {{ apt_current_stable }}/updates main non-free contrib"
+  - "deb http://cdn.debian.net/debian/ {{ apt_current_stable }} main non-free contrib"
+  - "deb http://cdn.debian.net/debian/ {{ apt_current_stable }}-updates main"
+  - "deb http://cdn.debian.net/debian/ {{ apt_current_stable }}-backports main"
   tags: apt
 
-- name: install apt sources (testing)
+- name: install apt sources testing ({{apt_current_testing}})
   apt_repository: repo='{{ item }}' state=present
   with_items:
-  - "deb http://security.debian.org/ testing/updates main non-free contrib"
-  - "deb http://cdn.debian.net/debian/ testing main non-free contrib"
-  - "deb http://cdn.debian.net/debian/ testing-updates main"
+  - "deb http://security.debian.org/ {{apt_current_testing}}/updates main non-free contrib"
+  - "deb http://cdn.debian.net/debian/ {{apt_current_testing}} main non-free contrib"
+  - "deb http://cdn.debian.net/debian/ {{apt_current_testing}}-updates main"
   tags: apt
   when: apt_include_testing
 

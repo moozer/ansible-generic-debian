@@ -8,7 +8,9 @@ enable_unattended_upgrade: true
 # apt.yml relates
 manage_apt: true
 apt_proxy_url: http://configserver01:9999
-apt_default_release: jessie
+apt_current_stable: stretch
+apt_current_testing: buster
+apt_default_release: stretch
 apt_release: "{{ apt_default_release }}"
 apt_do_update_list: true
 apt_include_testing: true
