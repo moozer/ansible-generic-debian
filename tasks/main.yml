@@ -2,14 +2,14 @@
 #
 #
 
-- name: installing unattended upgrades
-  include: unattended-upgrades.yml
-  when: enable_unattended_upgrade
-  tag: apt
-
 - name: add repositories and update
   include: apt.yml
   when: manage_apt
+  tag: apt
+
+- name: installing unattended upgrades
+  include: unattended-upgrades.yml
+  when: enable_unattended_upgrade
   tag: apt
 
 - name: add ldap config

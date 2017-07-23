@@ -17,8 +17,8 @@
 - name: install apt sources stable ({{apt_current_stable}})
   apt_repository: repo='{{ item }}' state=present
   with_items:
-  - "deb http://security.debian.org/ {{ apt_current_stable }}/updates main non-free contrib"
   - "deb http://cdn.debian.net/debian/ {{ apt_current_stable }} main non-free contrib"
+  - "deb http://security.debian.org/ {{ apt_current_stable }}/updates main non-free contrib"
   - "deb http://cdn.debian.net/debian/ {{ apt_current_stable }}-updates main"
   - "deb http://cdn.debian.net/debian/ {{ apt_current_stable }}-backports main"
   tags: apt
@@ -26,8 +26,8 @@
 - name: install apt sources testing ({{apt_current_testing}})
   apt_repository: repo='{{ item }}' state=present
   with_items:
-  - "deb http://security.debian.org/ {{apt_current_testing}}/updates main non-free contrib"
   - "deb http://cdn.debian.net/debian/ {{apt_current_testing}} main non-free contrib"
+  - "deb http://security.debian.org/ {{apt_current_testing}}/updates main non-free contrib"
   - "deb http://cdn.debian.net/debian/ {{apt_current_testing}}-updates main"
   tags: apt
   when: apt_include_testing
