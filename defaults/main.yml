@@ -6,18 +6,32 @@
 enable_unattended_upgrade: true
 
 #
-# Default for handling apt repos and other apt config
-## apt.yml relates
-generic_manage_apt: true
-apt_proxy_url: http://configserver01:9999
+# Defaults for handling apt repos and other apt config
+#
 
+# if false, we don't touch apt config
+generic_manage_apt: true
+
+# proxy to use, if undefined - it is unused
+#apt_proxy_url: <someproxy>
+
+# releases
 apt_current_testing: stretch
 apt_current_stable: jessie
 apt_default_release: "{{apt_current_stable}}"
 
-apt_release: "{{ apt_default_release }}"
+# servers to fetch from
+apt_default_repo_path: http://cdn.debian.net/debian/
+apt_security_repo_path: http://security.debian.org/
+
+
+#apt_release: "{{ apt_default_release }}"
+# do apt-get update, when older than 3600 sec
 apt_do_update_list: true
+
+# include repos from testing
 apt_include_testing: true
+
 
 apt_do_upgrades: false # perhaps a candidate for --extra-vars
 

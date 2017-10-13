@@ -1,5 +1,3 @@
-# tasks file for common-debian
-
 # for this to work, certain things must work
 #  apt_release must be valid in the *current* sources list
 #  apt-get update must work without errors
@@ -13,8 +11,8 @@
 - name: install apt sources stable ({{ apt_current_stable }})
   apt_repository: repo='{{ item }}' state=present
   with_items:
-  - "deb http://security.debian.org/ {{ apt_current_stable }}/updates main"
-  - "deb http://security.debian.org/ {{ apt_current_stable }}/updates non-free"
+  - "deb {{apt_security_repo_path}} {{ apt_current_stable }}/updates main"
+  - "deb {{apt_security_repo_path}} {{ apt_current_stable }}/updates non-free"
   - "deb {{apt_default_repo_path}} {{ apt_current_stable }} main"
   - "deb {{apt_default_repo_path}} {{ apt_current_stable }} non-free"
   - "deb {{apt_default_repo_path}} {{ apt_current_stable }}-updates main"
@@ -29,8 +27,8 @@
 - name: install apt sources testing ({{apt_current_testing}})
   apt_repository: repo='{{ item }}' state=present
   with_items:
-  - "deb http://security.debian.org/ {{apt_current_testing}}/updates main"
-  - "deb http://security.debian.org/ {{apt_current_testing}}/updates non-free"
+  - "deb {{apt_security_repo_path}} {{apt_current_testing}}/updates main"
+  - "deb {{apt_security_repo_path}} {{apt_current_testing}}/updates non-free"
   - "deb {{apt_default_repo_path}} {{apt_current_testing}} main"
   - "deb {{apt_default_repo_path}} {{apt_current_testing}} non-free"
   - "deb {{apt_default_repo_path}} {{apt_current_testing}}-updates main"
