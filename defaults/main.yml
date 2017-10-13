@@ -18,7 +18,10 @@ ldap_bindpw: somepassword
 
 # if false, we don't touch smtp config
 generic_manage_smtp: true
+
+# sender domain
 smtp_sender_fqdn: localdomain
+# SMTP server to use
 smtp_upstream: smtp.localdomain
 
 #

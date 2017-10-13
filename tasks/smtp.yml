@@ -8,6 +8,7 @@
     mode: 0644
     owner: root
     group: root
+  register: exim4_conf_result
 
 - name: update mailname
   template:
@@ -16,3 +17,9 @@
     mode: 0644
     owner: root
     group: root
+  register: mailname_result
+
+- name: run update conf
+  command: /usr/sbin/update-exim4.conf
+  when: exim4_conf_result.changed or mailname_result.changed
+  notify: reload exim4
