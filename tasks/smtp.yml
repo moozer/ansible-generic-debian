@@ -1,0 +1,27 @@
+- name: install exim4, if appl
+  apt:
+    state: present
+    name: exim4
+
+- name: update exim4 base config file
+  template:
+    src: update_exim4.conf.conf.j2
+    dest: /etc/exim4/update-exim4.conf.conf
+    mode: 0644
+    owner: root
+    group: root
+  register: exim4_conf_result
+
+- name: update mailname
+  template:
+    src: mailname.j2
+    dest: /etc/mailname
+    mode: 0644
+    owner: root
+    group: root
+  register: mailname_result
+
+- name: run update conf
+  command: /usr/sbin/update-exim4.conf
+  when: exim4_conf_result.changed or mailname_result.changed
+  notify: reload exim4

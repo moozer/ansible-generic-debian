@@ -7,9 +7,22 @@
 # you're doing.
 Vagrant.configure(2) do |config|
 
-  config.vm.define "jessie" do |server|
+  config.vm.define "mail" do |server|
+    server.vm.box = "debian/stretch64"
+    server.vm.hostname = "mail"
+  end
+
+  # debian/wheezy64 is not on hashicorp atlas using libvirt.
+  # ok, so not testing that using "vagrant up"
+
+  config.vm.define "debian-jessie" do |server|
     server.vm.box = "debian/jessie64"
     server.vm.hostname = "debian-jessie"
+  end
+
+  config.vm.define "debian-stretch" do |server|
+    server.vm.box = "debian/stretch64"
+    server.vm.hostname = "debian-stretch"
   end
 
   config.vm.provision "ansible" do |ansible|

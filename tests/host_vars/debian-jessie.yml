@@ -1,0 +1,5 @@
+# apt
+apt_default_release: jessie
+
+# smtp
+smtp_sender_fqdn: jessie
