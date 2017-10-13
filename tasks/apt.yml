@@ -18,7 +18,6 @@
   - "deb {{apt_default_repo_path}} {{ apt_current_stable }}-updates main"
   - "deb {{apt_default_repo_path}} {{ apt_current_stable }}-backports main"
   register: apt_repo_stable_return
-  tags: apt
 
 - name: install apt sources testing ({{apt_current_testing}})
   apt_repository: repo='{{ item }}' state=present
@@ -29,12 +28,10 @@
   - "deb {{apt_default_repo_path}} {{apt_current_testing}} non-free"
   - "deb {{apt_default_repo_path}} {{apt_current_testing}}-updates main"
   register: apt_repo_testing_return
-  tags: apt
   when: apt_include_testing
 
 - name: apt configurations
   template: src=apt.conf.j2 dest="/etc/apt/apt.conf"
-  tags: apt
 
 - name: update apt packages
   apt: update_cache=yes
@@ -44,4 +41,3 @@
 - name: updating package list (if old)
   apt: update_cache=yes cache_valid_time=3600
   when: apt_do_update_list
-  tags: apt
