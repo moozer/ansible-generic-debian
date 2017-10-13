@@ -17,12 +17,8 @@
   - "deb {{apt_default_repo_path}} {{ apt_current_stable }} non-free"
   - "deb {{apt_default_repo_path}} {{ apt_current_stable }}-updates main"
   - "deb {{apt_default_repo_path}} {{ apt_current_stable }}-backports main"
-  register: apt_repo_return
+  register: apt_repo_stable_return
   tags: apt
-
-- name: update apt packages
-  apt: update_cache=yes
-  when: "{{apt_repo_return.changed}}"
 
 - name: install apt sources testing ({{apt_current_testing}})
   apt_repository: repo='{{ item }}' state=present
@@ -32,25 +28,20 @@
   - "deb {{apt_default_repo_path}} {{apt_current_testing}} main"
   - "deb {{apt_default_repo_path}} {{apt_current_testing}} non-free"
   - "deb {{apt_default_repo_path}} {{apt_current_testing}}-updates main"
-  register: apt_repo_return
+  register: apt_repo_testing_return
   tags: apt
   when: apt_include_testing
-
-- name: update apt packages
-  apt: update_cache=yes
-  when: "{{apt_repo_return.changed}} and {{apt_include_testing}}"
-  tags: apt
-
-- name: updating package list
-  apt: update_cache=yes cache_valid_time=3600
-  when: apt_do_update_list
-  tags: apt
 
 - name: apt configurations
   template: src=apt.conf.j2 dest="/etc/apt/apt.conf"
   tags: apt
 
-- name: Upgrade packages
-  apt: upgrade=full
-  when: apt_do_upgrades
+- name: update apt packages
+  apt: update_cache=yes
+  when: apt_repo_stable_return.changed
+        or (apt_repo_testing_return.changed and apt_include_testing)
+
+- name: updating package list (if old)
+  apt: update_cache=yes cache_valid_time=3600
+  when: apt_do_update_list
   tags: apt
