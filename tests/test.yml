@@ -18,6 +18,6 @@
       src: mail-update-exim4.conf
       dest: /etc/exim4/update-exim4.conf.conf
 
-  handles:
+  handlers:
     - name: reload exim4
       service: name=exim4 state=reloaded

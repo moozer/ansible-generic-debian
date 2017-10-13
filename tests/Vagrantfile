@@ -8,7 +8,7 @@
 Vagrant.configure(2) do |config|
 
   config.vm.define "mail" do |server|
-    server.vm.box = "debian/stretsh"
+    server.vm.box = "debian/stretch64"
     server.vm.hostname = "mail"
   end
 
