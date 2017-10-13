@@ -12,6 +12,9 @@ Vagrant.configure(2) do |config|
     server.vm.hostname = "mail"
   end
 
+  # debian/wheezy64 is not on hashicorp atlas using libvirt.
+  # ok, so not testing that using "vagrant up"
+
   config.vm.define "debian-jessie" do |server|
     server.vm.box = "debian/jessie64"
     server.vm.hostname = "debian-jessie"
