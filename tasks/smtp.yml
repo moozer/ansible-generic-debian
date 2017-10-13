@@ -1,5 +1,7 @@
-- debug: msg="config smtp"
-
+- name: install exim4, if appl
+  apt:
+    state: present
+    name: exim4
 
 - name: update exim4 base config file
   template:
