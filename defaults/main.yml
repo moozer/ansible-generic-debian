@@ -13,7 +13,7 @@ enable_unattended_upgrade: true
 generic_manage_apt: true
 
 # proxy to use, if undefined - it is unused
-#apt_proxy_url: <someproxy>
+#apt_proxy_url: <someproxy:port>
 
 # releases
 apt_current_testing: stretch
@@ -23,7 +23,6 @@ apt_default_release: "{{apt_current_stable}}"
 # servers to fetch from
 apt_default_repo_path: http://cdn.debian.net/debian/
 apt_security_repo_path: http://security.debian.org/
-
 
 #apt_release: "{{ apt_default_release }}"
 # do apt-get update, when older than 3600 sec

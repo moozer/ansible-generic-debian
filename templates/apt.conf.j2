@@ -1,14 +1,19 @@
 # apt-conf
 
 {# add proxy if applicable #}
-{% if apt_proxy_url %}
+{% if apt_proxy_url is defined %}
 Acquire::http::Proxy "{{ apt_proxy_url }}";
 {% else %}
-#Acquire::http::Proxy "http://someserver:9999";
+# ansible note:
+#   apt_proxy_url undefined, so not setting a proxy
+# ie. not doing this:
+# Acquire::http::Proxy "http://someserver:9999";
 {% endif %}
 
 {# set the default release #}
 {% if apt_default_release is defined %}
 APT::Default-Release "{{ apt_default_release }}";
+{% else %}
+# ansible note:
+#   apt_default_release undefined, so not setting a default release
 {% endif %}
-
