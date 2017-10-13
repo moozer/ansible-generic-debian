@@ -4,7 +4,7 @@
 
 - name: add repositories and update
   include: apt.yml
-  when: manage_apt
+  when: generic_manage_apt
   tag: apt
 
 - name: installing unattended upgrades

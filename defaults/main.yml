@@ -5,8 +5,10 @@
 # unattended upgrades
 enable_unattended_upgrade: true
 
-# apt.yml relates
-manage_apt: true
+#
+# Default for handling apt repos and other apt config
+## apt.yml relates
+generic_manage_apt: true
 apt_proxy_url: http://configserver01:9999
 
 apt_current_testing: stretch
