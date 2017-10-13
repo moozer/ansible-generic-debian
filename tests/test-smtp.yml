@@ -1,9 +1,8 @@
-- name: ping mail server
-  shell: /bin/ping -c 1 mail
+- name: waiting for mail server to come up
+  wait_for:
+    host: mail
+    port: 25
+    delay: 3
 
 - name: send mail
   shell: 'echo test | mail vagrant@mail'
-
-  # check_mode: True
-  # changed_when: False
-  # tags: tests
