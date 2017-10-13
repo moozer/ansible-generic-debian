@@ -4,15 +4,15 @@
 
 - name: add repositories and update
   include: apt.yml
-  when: manage_apt
-  tag: apt
+  when: generic_manage_apt
+  tags: apt
 
 - name: installing unattended upgrades
   include: unattended-upgrades.yml
   when: enable_unattended_upgrade
-  tag: apt
+  tags: apt
 
 - name: add ldap config
   include: add_ldap.yml
   when: use_ldap
-  tag: ldap
+  tags: ldap
