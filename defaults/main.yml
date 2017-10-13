@@ -5,6 +5,22 @@
 # unattended upgrades
 enable_unattended_upgrade: true
 
+# for ldap
+use_ldap: true
+ldap_uri: ldap://someldapserver
+ldap_basedc: dc=mydomain,dc=cm
+ldap_binddn:  cn=admin,dcmydomain,dc=com
+ldap_bindpw: somepassword
+
+#
+# Defaults for SMTP smarthost
+#
+
+# if false, we don't touch smtp config
+generic_manage_smtp: true
+smtp_sender_fqdn: localdomain
+smtp_upstream: smtp.localdomain
+
 #
 # Defaults for handling apt repos and other apt config
 #
@@ -30,10 +46,3 @@ apt_do_update_list: true
 
 # include repos from testing
 apt_include_testing: true
-
-# for ldap
-use_ldap: true
-ldap_uri: ldap://someldapserver
-ldap_basedc: dc=mydomain,dc=cm
-ldap_binddn:  cn=admin,dcmydomain,dc=com
-ldap_bindpw: somepassword
