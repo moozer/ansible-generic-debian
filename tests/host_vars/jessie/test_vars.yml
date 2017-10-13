@@ -2,7 +2,7 @@
     enable_unattended_upgrade: true
 
     # apt.yml relates
-    manage_apt: true
+    generic_manage_apt: true
     apt_proxy_url: http://configserver01:9999
     apt_default_release: jessie
     apt_release: "{{ apt_default_release }}"
