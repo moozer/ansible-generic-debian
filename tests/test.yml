@@ -6,17 +6,45 @@
   - generic-debian
 
   tasks:
-  - debug: var=ansible_hostname
+  - name: update hosts file
+    template:
+      src: etc_hosts.j2
+      dest: /etc/hosts
+      mode: 0644
+      owner: root
+      group: root
+
+  - include: test-smtp.yml
 
 - hosts: mail
   become: yes
   user: vagrant
 
   tasks:
+  - name: update hosts file
+    template:
+      src: etc_hosts.j2
+      dest: /etc/hosts
+      mode: 0644
+      owner: root
+      group: root
+
+  - name: install stuff
+    apt:
+      name: "{{item}}"
+      state: present
+    with_items:
+      - exim4
+      - mutt
+
   - name: set exim4 config
     copy:
       src: mail-update-exim4.conf
       dest: /etc/exim4/update-exim4.conf.conf
+
+  - name: apply config
+    command: /usr/sbin/update-exim4.conf
+    notify: reload exim4
 
   handlers:
     - name: reload exim4

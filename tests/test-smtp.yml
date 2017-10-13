@@ -1,0 +1,9 @@
+- name: ping mail server
+  shell: /bin/ping -c 1 mail
+
+- name: send mail
+  shell: 'echo test | mail vagrant@mail'
+
+  # check_mode: True
+  # changed_when: False
+  # tags: tests
