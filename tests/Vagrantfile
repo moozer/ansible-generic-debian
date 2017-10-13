@@ -7,9 +7,19 @@
 # you're doing.
 Vagrant.configure(2) do |config|
 
+  config.vm.define "mail" do |server|
+    server.vm.box = "debian/stretsh"
+    server.vm.hostname = "mail"
+  end
+
   config.vm.define "jessie" do |server|
     server.vm.box = "debian/jessie64"
     server.vm.hostname = "debian-jessie"
+  end
+
+  config.vm.define "stretch" do |server|
+    server.vm.box = "debian/stretch64"
+    server.vm.hostname = "debian-stretch"
   end
 
   config.vm.provision "ansible" do |ansible|

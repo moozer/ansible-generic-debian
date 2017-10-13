@@ -1,4 +1,4 @@
-- hosts: all
+- hosts: debian-*
   become: yes
   user: vagrant
 
@@ -7,3 +7,17 @@
 
   tasks:
   - debug: var=ansible_hostname
+
+- hosts: mail
+  become: yes
+  user: vagrant
+
+  tasks:
+  - name: set exim4 config
+    copy:
+      src: mail-update-exim4.conf
+      dest: /etc/exim4/update-exim4.conf.conf
+
+  handles:
+    - name: reload exim4
+      service: name=exim4 state=reloaded
