@@ -3,6 +3,12 @@
     state: present
     name: exim4
 
+- name: change receiver of "root" emails
+  lineinfile:
+    dest: /etc/aliases
+    regexp: "^root: "
+    line: 'root: {{ smtp_root_alias }}' 
+
 - name: update exim4 base config file
   template:
     src: update_exim4.conf.conf.j2
