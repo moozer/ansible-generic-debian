@@ -3,6 +3,8 @@
     host: mail
     port: 25
     delay: 3
+  changed_when: false
 
 - name: send mail
   shell: 'echo test | mail vagrant@mail'
+  changed_when: false
