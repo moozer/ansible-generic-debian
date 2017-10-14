@@ -18,11 +18,11 @@
 
 dc_eximconfig_configtype='smarthost'
 dc_other_hostnames=''
-dc_local_interfaces='127.0.0.1 ; ::1'
+dc_local_interfaces='{{smtp_listen_interface}}'
 dc_readhost=''
 dc_relay_domains=''
 dc_minimaldns='false'
-dc_relay_nets=''
+dc_relay_nets='{{smtp_relay_subnet}}'
 dc_smarthost='{{smtp_upstream}}'
 CFILEMODE='644'
 dc_use_split_config='false'

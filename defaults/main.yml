@@ -24,6 +24,11 @@ smtp_sender_fqdn: localdomain
 # SMTP server to use
 smtp_upstream: smtp.localdomain
 
+# Subenet to relay for - empty for none
+smtp_relay_subnet: ""
+# listen for connections. Empty for all interfaces, defaults to localhost only
+smtp_listen_interface: "127.0.0.1 ; ::1"
+
 #
 # Defaults for handling apt repos and other apt config
 #
