@@ -23,6 +23,13 @@ generic_manage_smtp: true
 smtp_sender_fqdn: localdomain
 # SMTP server to use
 smtp_upstream: smtp.localdomain
+# smtp system user receiver - name of the system user to receive mails for "root"
+smtp_root_alias: root
+
+# Subenet to relay for - empty for none
+smtp_relay_subnet: ""
+# listen for connections. Empty for all interfaces, defaults to localhost only
+smtp_listen_interface: "127.0.0.1 ; ::1"
 
 #
 # Defaults for handling apt repos and other apt config

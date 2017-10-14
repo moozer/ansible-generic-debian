@@ -25,6 +25,14 @@ Vagrant.configure(2) do |config|
     server.vm.hostname = "debian-stretch"
   end
 
+  # debian/buster64 is not available yet for libvirt
+  # ok, so not testing that using "vagrant up"
+  # config.vm.define "debian-buster" do |server|
+  #   server.vm.box = "debian/buster64"
+  #   server.vm.hostname = "debian-buster"
+  # end
+
+
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "test.yml"
   end
