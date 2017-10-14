@@ -24,7 +24,7 @@ smtp_sender_fqdn: localdomain
 # SMTP server to use
 smtp_upstream: smtp.localdomain
 # smtp system user receiver - name of the system user to receive mails for "root"
-smtp_root_alias: vagrant
+smtp_root_alias: root
 
 # Subenet to relay for - empty for none
 smtp_relay_subnet: ""
