@@ -37,6 +37,12 @@
   register: apt_repo_testing_sec_return
   when: apt_include_testing
 
+- name: install other apt sources
+  apt_repository: repo='{{ item }}' state=present
+  with_items: "{{apt_other_repos}}"
+  when: not apt_other_repos is none
+  register: apt_repo_other_return
+
 - name: apt configurations
   template: src=apt.conf.j2 dest="/etc/apt/apt.conf"
 
