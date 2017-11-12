@@ -9,25 +9,40 @@
 # also check for stale apt-pinning
 
 - name: install apt sources stable ({{ apt_current_stable }})
-  apt_repository: repo='{{ item }}' state=present
+  apt_repository: repo='deb {{apt_default_repo_path}} {{ apt_current_stable }} {{ item }}' state=present
   with_items:
-  - "deb {{apt_security_repo_path}} {{ apt_current_stable }}/updates main"
-  - "deb {{apt_security_repo_path}} {{ apt_current_stable }}/updates non-free"
-  - "deb {{apt_default_repo_path}} {{ apt_current_stable }} main"
-  - "deb {{apt_default_repo_path}} {{ apt_current_stable }} non-free"
-  - "deb {{apt_default_repo_path}} {{ apt_current_stable }}-updates main"
-  - "deb {{apt_default_repo_path}} {{ apt_current_stable }}-backports main"
+  - "main"
+  - "non-free"
   register: apt_repo_stable_return
 
-- name: install apt sources testing ({{apt_current_testing}})
-  apt_repository: repo='{{ item }}' state=present
+- name: install apt sources stable ({{ apt_current_stable }}) for updates and backports
+  apt_repository: repo='deb {{apt_default_repo_path}} {{ apt_current_stable }}-{{ item }} main' state=present
   with_items:
-  - "deb {{apt_security_repo_path}} {{apt_current_testing}}/updates main"
-  - "deb {{apt_security_repo_path}} {{apt_current_testing}}/updates non-free"
-  - "deb {{apt_default_repo_path}} {{apt_current_testing}} main"
-  - "deb {{apt_default_repo_path}} {{apt_current_testing}} non-free"
-  - "deb {{apt_default_repo_path}} {{apt_current_testing}}-updates main"
+  - "updates"
+  - "backports"
+  register: apt_repo_stable_updates_return
+
+- name: install apt sources testing ({{apt_current_testing}})
+  apt_repository: repo='deb {{apt_default_repo_path}} {{apt_current_testing}} {{ item }}' state=present
+  with_items:
+  - "main"
+  - "non-free"
   register: apt_repo_testing_return
+  when: apt_include_testing
+
+- name: install apt security sources stable ({{ apt_current_stable }})
+  apt_repository: repo='deb {{apt_security_repo_path}} {{ apt_current_stable }}/updates {{ item }}' state=present
+  with_items:
+  - "main"
+  - "non-free"
+  register: apt_repo_stable_sec_return
+
+- name: install apt security sources testing ({{apt_current_testing}})
+  apt_repository: repo='deb {{apt_security_repo_path}} {{apt_current_testing}}/updates {{ item }}' state=present
+  with_items:
+  - "main"
+  - "non-free"
+  register: apt_repo_testing_sec_return
   when: apt_include_testing
 
 - name: apt configurations
@@ -35,8 +50,11 @@
 
 - name: update apt packages
   apt: update_cache=yes
-  when: apt_repo_stable_return.changed
+  when:    apt_repo_stable_return.changed
+        or apt_repo_stable_updates_return.changed
+        or apt_repo_stable_sec_return.changed
         or (apt_repo_testing_return.changed and apt_include_testing)
+        or (apt_repo_testing_sec_return.changed and apt_include_testing)
 
 - name: updating package list (if old)
   apt: update_cache=yes cache_valid_time=3600
