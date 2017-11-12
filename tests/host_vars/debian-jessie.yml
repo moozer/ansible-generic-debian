@@ -3,3 +3,6 @@ apt_default_release: jessie
 
 # smtp
 smtp_sender_fqdn: jessie
+
+apt_current_testing: stretch
+apt_current_stable: jessie

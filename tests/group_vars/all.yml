@@ -17,6 +17,10 @@ generic_manage_apt: true
 apt_proxy_url: http://configserver01:9999
 apt_release: "{{ apt_default_release }}"
 apt_do_update_list: true
-apt_include_testing: false
+apt_include_testing: true
 
 apt_do_upgrades: false # perhaps a candidate for --extra-vars
+
+# some random repo for testing
+apt_other_repos:
+  - "deb http://http.us.debian.org/debian sid main non-free contrib"
