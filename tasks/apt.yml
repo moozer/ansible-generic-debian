@@ -9,36 +9,54 @@
 # also check for stale apt-pinning
 
 - name: install apt sources stable ({{ apt_current_stable }})
-  apt_repository: repo='deb {{apt_default_repo_path}} {{ apt_current_stable }} {{ item }}' state=present
+  apt_repository:
+    repo: 'deb {{apt_default_repo_path}} {{ apt_current_stable }} {{ item }}'
+    state: present
+    update_cache: false
   with_items: "{{apt_components}}"
   register: apt_repo_stable_return
 
 - name: install apt sources stable ({{ apt_current_stable }}) for updates and backports
-  apt_repository: repo='deb {{apt_default_repo_path}} {{ apt_current_stable }}-{{ item }} main' state=present
+  apt_repository:
+    repo: 'deb {{apt_default_repo_path}} {{ apt_current_stable }}-{{ item }} main'
+    state: present
+    update_cache: false
   with_items:
   - "updates"
   - "backports"
   register: apt_repo_stable_updates_return
 
 - name: install apt sources testing ({{apt_current_testing}})
-  apt_repository: repo='deb {{apt_default_repo_path}} {{apt_current_testing}} {{ item }}' state=present
+  apt_repository:
+    repo: 'deb {{apt_default_repo_path}} {{apt_current_testing}} {{ item }}'
+    state: present
+    update_cache: false
   with_items: "{{apt_components}}"
   register: apt_repo_testing_return
   when: apt_include_testing
 
 - name: install apt security sources stable ({{ apt_current_stable }})
-  apt_repository: repo='deb {{apt_security_repo_path}} {{ apt_current_stable }}/updates {{ item }}' state=present
+  apt_repository:
+    repo: 'deb {{apt_security_repo_path}} {{ apt_current_stable }}/updates {{ item }}'
+    state: present
+    update_cache: false
   with_items: "{{apt_components}}"
   register: apt_repo_stable_sec_return
 
 - name: install apt security sources testing ({{apt_current_testing}})
-  apt_repository: repo='deb {{apt_security_repo_path}} {{apt_current_testing}}/updates {{ item }}' state=present
+  apt_repository:
+    repo: 'deb {{apt_security_repo_path}} {{apt_current_testing}}/updates {{ item }}'
+    state: present
+    update_cache: false
   with_items: "{{apt_components}}"
   register: apt_repo_testing_sec_return
   when: apt_include_testing
 
 - name: install other apt sources
-  apt_repository: repo='{{ item }}' state=present
+  apt_repository:
+    repo: '{{ item }}'
+    state: present
+    update_cache: false
   with_items: "{{apt_other_repos}}"
   when: not apt_other_repos is none
   register: apt_repo_other_return
@@ -51,6 +69,7 @@
   when:    apt_repo_stable_return.changed
         or apt_repo_stable_updates_return.changed
         or apt_repo_stable_sec_return.changed
+        or (apt_repo_other_return is defined and apt_repo_other_return.changed)
         or (apt_repo_testing_return.changed and apt_include_testing)
         or (apt_repo_testing_sec_return.changed and apt_include_testing)
 
