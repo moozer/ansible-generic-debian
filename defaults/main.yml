@@ -46,6 +46,10 @@ apt_current_testing: stretch
 apt_current_stable: jessie
 apt_default_release: "{{apt_current_stable}}"
 
+# components
+apt_components:
+  - main
+
 # servers to fetch from
 apt_default_repo_path: http://cdn.debian.net/debian/
 apt_security_repo_path: http://security.debian.org/

@@ -10,9 +10,7 @@
 
 - name: install apt sources stable ({{ apt_current_stable }})
   apt_repository: repo='deb {{apt_default_repo_path}} {{ apt_current_stable }} {{ item }}' state=present
-  with_items:
-  - "main"
-  - "non-free"
+  with_items: "{{apt_components}}"
   register: apt_repo_stable_return
 
 - name: install apt sources stable ({{ apt_current_stable }}) for updates and backports
@@ -24,24 +22,18 @@
 
 - name: install apt sources testing ({{apt_current_testing}})
   apt_repository: repo='deb {{apt_default_repo_path}} {{apt_current_testing}} {{ item }}' state=present
-  with_items:
-  - "main"
-  - "non-free"
+  with_items: "{{apt_components}}"
   register: apt_repo_testing_return
   when: apt_include_testing
 
 - name: install apt security sources stable ({{ apt_current_stable }})
   apt_repository: repo='deb {{apt_security_repo_path}} {{ apt_current_stable }}/updates {{ item }}' state=present
-  with_items:
-  - "main"
-  - "non-free"
+  with_items: "{{apt_components}}"
   register: apt_repo_stable_sec_return
 
 - name: install apt security sources testing ({{apt_current_testing}})
   apt_repository: repo='deb {{apt_security_repo_path}} {{apt_current_testing}}/updates {{ item }}' state=present
-  with_items:
-  - "main"
-  - "non-free"
+  with_items: "{{apt_components}}"
   register: apt_repo_testing_sec_return
   when: apt_include_testing
 
