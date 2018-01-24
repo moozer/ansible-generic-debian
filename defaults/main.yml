@@ -66,4 +66,9 @@ apt_include_testing: true
 #
 # defaults for handling firewall rules
 #
-generic_manage_firewall: True
+generic_manage_firewall: true
+
+# drop ip4 or ip6 in iptables.
+# don't use both, and tweak sysctl also
+firewall_drop_all_ip6: true
+firewall_drop_all_ip4: false
