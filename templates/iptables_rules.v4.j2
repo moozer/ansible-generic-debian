@@ -52,6 +52,11 @@
 # needed due to updates
 # TODO: limit to SRV LAN
 
+# allow OUTPUT to this network
+{% if firewall_allow_all_output_network %}
+-A OUTPUT -d {{ firewall_allow_all_output_network}} --j ACCEPT
+{% endif %}
+
 # everything else is logged
 -A OUTPUT -j LOG_AND_DROP
 -A INPUT -j LOG_AND_DROP

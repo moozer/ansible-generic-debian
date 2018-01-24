@@ -72,3 +72,7 @@ generic_manage_firewall: true
 # don't use both, and tweak sysctl also
 firewall_drop_all_ip6: true
 firewall_drop_all_ip4: false
+
+# blanked ACCEPT outgoing to this IP range.
+# use 0.0.0.0/0 for everything
+firewall_allow_all_output_network: 0.0.0.0/0
