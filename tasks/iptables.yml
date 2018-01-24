@@ -37,6 +37,6 @@
   register: iptables_rules_v6_result
   when: firewall_drop_all_ip6
 
-- name: restore iptables rules (v4)
+- name: restore iptables rules (v6)
   command: ip6tables-restore /etc/iptables/rules.v6
   when: iptables_rules_v6_result.changed
