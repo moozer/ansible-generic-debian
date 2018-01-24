@@ -14,7 +14,7 @@
       owner: root
       group: root
 
-  - include: test-smtp.yml
+  - import_tasks: test-smtp.yml
 
 - hosts: mail
   become: yes
