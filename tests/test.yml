@@ -43,9 +43,11 @@
     copy:
       src: mail-update-exim4.conf
       dest: /etc/exim4/update-exim4.conf.conf
+    register: exim4_config_change
 
   - name: apply config
     command: /usr/sbin/update-exim4.conf
+    when: exim4_config_change.changed
     notify: reload exim4
 
   handlers:
