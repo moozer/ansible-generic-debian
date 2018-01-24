@@ -2,19 +2,19 @@ generic_manage_smtp: true
 smtp_upstream: mail
 
 # for ldap
-use_ldap: false
+generic_manage_ldap: false
 ldap_uri: ldap://someldapserver
 ldap_basedc: dc=mydomain,dc=cm
 ldap_binddn:  cn=admin,dcmydomain,dc=com
 ldap_bindpw: somepassword
 
 # unattended upgrades
-enable_unattended_upgrade: true
+generic_manage_unattended_upgrade: true
 
 
 # apt.yml relates
 generic_manage_apt: true
-apt_proxy_url: http://configserver01:9999
+apt_proxy_url: 
 apt_release: "{{ apt_default_release }}"
 apt_do_update_list: true
 apt_include_testing: true

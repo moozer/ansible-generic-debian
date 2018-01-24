@@ -3,21 +3,21 @@
 #
 
 - name: add repositories and update
-  include: apt.yml
+  import_tasks: apt.yml
   when: generic_manage_apt
   tags: apt
 
 - name: installing unattended upgrades
-  include: unattended-upgrades.yml
-  when: enable_unattended_upgrade
+  import_tasks: unattended-upgrades.yml
+  when: generic_manage_unattended_upgrade
   tags: apt
 
 - name: add ldap config
-  include: add_ldap.yml
-  when: use_ldap
+  import_tasks: add_ldap.yml
+  when: generic_manage_ldap
   tags: ldap
 
 - name: add SMTP smarthost
-  include: smtp.yml
+  import_tasks: smtp.yml
   when: generic_manage_smtp
   tags: smtp

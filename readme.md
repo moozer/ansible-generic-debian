@@ -3,7 +3,9 @@ generic-debian
 
 This role replaces having single playbooks for generic debian tasks.
 
-See the [test](tests/) directory for minimal usage.
+See the [test](tests/) directory for example usage.
+
+See variables with defaults in [defaults/main.yml](defaults/main.yml)
 
 apt
 ---------
@@ -18,7 +20,7 @@ generic_manage_apt: true
 if the proxy var is not empty, it gets included in apt.conf
 
 ```
-apt_proxy_url: http://configserver01:9999
+apt_proxy_url: http://someproxyserver:9999
 
 apt_default_release: jessie
 apt_do_update_list: true
@@ -47,7 +49,10 @@ Currently it is security updates that gets updated
 
 Disables or enables unattended upgrades
 
-    enable_unattended_upgrade: true
+```
+generic_manage_unattended_upgrade: true
+```
+
 
 ldap
 -----------
@@ -58,11 +63,15 @@ Enable ldap lookups for users
 
 Disables or enables ldap use
 
-  use_ldap: false
+```
+generic_manage_ldap: false
+```
 
 ldap server parameters
 
-  ldap_uri: ldap://someldapserver
-  ldap_basedc: dc=mydomain,dc=cm
-  ldap_binddn:  cn=admin,dcmydomain,dc=com
-  ldap_bindpw: somepassword
+```
+ldap_uri: ldap://someldapserver
+ldap_basedc: dc=mydomain,dc=cm
+ldap_binddn:  cn=admin,dcmydomain,dc=com
+ldap_bindpw: somepassword
+```

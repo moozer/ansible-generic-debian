@@ -14,7 +14,7 @@
       owner: root
       group: root
 
-  - include: test-smtp.yml
+  - import_tasks: test-smtp.yml
 
 - hosts: mail
   become: yes
@@ -33,6 +33,8 @@
     apt:
       name: "{{item}}"
       state: present
+      update_cache: yes
+      cache_valid_time: 3600
     with_items:
       - exim4
       - mutt
@@ -41,9 +43,11 @@
     copy:
       src: mail-update-exim4.conf
       dest: /etc/exim4/update-exim4.conf.conf
+    register: exim4_config_change
 
   - name: apply config
     command: /usr/sbin/update-exim4.conf
+    when: exim4_config_change.changed
     notify: reload exim4
 
   handlers:
