@@ -20,7 +20,7 @@ generic_manage_apt: true
 if the proxy var is not empty, it gets included in apt.conf
 
 ```
-apt_proxy_url: http://configserver01:9999
+apt_proxy_url: http://someproxyserver:9999
 
 apt_default_release: jessie
 apt_do_update_list: true
