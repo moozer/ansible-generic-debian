@@ -58,7 +58,7 @@ Enable ldap lookups for users
 
 Disables or enables ldap use
 
-  use_ldap: false
+  generic_manage_ldap: false
 
 ldap server parameters
 

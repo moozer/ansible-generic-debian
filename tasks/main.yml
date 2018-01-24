@@ -14,7 +14,7 @@
 
 - name: add ldap config
   include: add_ldap.yml
-  when: use_ldap
+  when: generic_manage_ldap
   tags: ldap
 
 - name: add SMTP smarthost

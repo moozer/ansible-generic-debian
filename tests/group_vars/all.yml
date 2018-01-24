@@ -2,7 +2,7 @@ generic_manage_smtp: true
 smtp_upstream: mail
 
 # for ldap
-use_ldap: false
+generic_manage_ldap: false
 ldap_uri: ldap://someldapserver
 ldap_basedc: dc=mydomain,dc=cm
 ldap_binddn:  cn=admin,dcmydomain,dc=com
