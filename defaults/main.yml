@@ -3,10 +3,10 @@
 #
 
 # unattended upgrades
-enable_unattended_upgrade: true
+generic_manage_unattended_upgrade: true
 
 # for ldap
-use_ldap: true
+generic_manage_ldap: false
 ldap_uri: ldap://someldapserver
 ldap_basedc: dc=mydomain,dc=cm
 ldap_binddn:  cn=admin,dcmydomain,dc=com

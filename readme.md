@@ -47,7 +47,7 @@ Currently it is security updates that gets updated
 
 Disables or enables unattended upgrades
 
-    enable_unattended_upgrade: true
+    generic_manage_unattended_upgrade: true
 
 ldap
 -----------

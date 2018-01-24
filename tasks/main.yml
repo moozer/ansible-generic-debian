@@ -9,7 +9,7 @@
 
 - name: installing unattended upgrades
   include: unattended-upgrades.yml
-  when: enable_unattended_upgrade
+  when: generic_manage_unattended_upgrade
   tags: apt
 
 - name: add ldap config
