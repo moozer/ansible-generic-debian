@@ -1,0 +1,17 @@
+- name: install iptables related packages
+  apt: name={{item}} state=present
+  with_items:
+    - iptables-persistent
+
+- name: upload iptables restore file
+  template:
+    src: iptables_rules.v4.j2
+    dest: /etc/iptables/rules.v4
+    mode: 0600
+    owner: root
+    group: root
+  register: iptables_rules_v4_result
+
+- name: restore iptables rules (v4)
+  command: iptables-restore /etc/iptables/rules.v4
+  when: iptables_rules_v4_result.changed

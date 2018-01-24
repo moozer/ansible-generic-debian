@@ -62,3 +62,8 @@ apt_do_update_list: true
 
 # include repos from testing
 apt_include_testing: true
+
+#
+# defaults for handling firewall rules
+#
+generic_manage_firewall: True
