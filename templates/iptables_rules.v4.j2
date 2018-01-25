@@ -6,7 +6,7 @@
 :OUTPUT DROP [0:0]
 
 # allow all on loopback
--A INPUT -i lo -j ACCEPT
+-A INPUT  -i lo -j ACCEPT
 -A OUTPUT -o lo -j ACCEPT
 
 # chain: LOG_AND_DROP
@@ -19,6 +19,12 @@
 -A LOG_AND_ACCEPT -m limit --limit 60/min -j LOG --log-prefix "IPTables Packet accept: " --log-level 7
 -A LOG_AND_ACCEPT -j ACCEPT
 
+# chain: EXTRA_IN
+:EXTRA_IN - [0:0]
+
+# chain: EXTRA_out
+:EXTRA_OUT - [0:0]
+
 # allow established connections
 -A INPUT  -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 -A OUTPUT -m conntrack --ctstate ESTABLISHED -j ACCEPT
@@ -28,37 +34,55 @@
 -A OUTPUT -m conntrack --ctstate INVALID -j LOG_AND_DROP
 
 # incoming: ssh
--A INPUT  -p tcp --dport 22 -m state --state NEW,ESTABLISHED -m limit --limit 12/min -j LOG_AND_ACCEPT
--A OUTPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
-# TODO: limit to MGNT LAN
+{% if firewall_server_network %}
+-A INPUT  -p tcp -d {{ firewall_server_network }} --dport 22 -m state --state NEW,ESTABLISHED -j LOG_AND_ACCEPT -m comment --comment "SSH incoming from {{ firewall_server_network }} - no limit"
+-A OUTPUT -p tcp -d {{ firewall_server_network }} --sport 22 -m state --state ESTABLISHED     -j ACCEPT         -m comment --comment "SSH incoming from {{ firewall_server_network }} - no limit"
+{% endif %}
+
+-A INPUT  -p tcp --dport 22 -m state --state NEW,ESTABLISHED -m limit --limit 12/min -j LOG_AND_ACCEPT -m comment --comment "SSH incoming - limited"
+-A OUTPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT -m comment --comment "SSH incoming - limited"
+# TODO: limit to MGNT LAN?
 
 # incoming: ping host
 -A INPUT -p icmp --icmp-type echo-request -m limit --limit 60/min -j ACCEPT
 # return packages accepted due to "RELATED"
 
 # outgoing: DNS
--A OUTPUT -p udp --dport 53 -j ACCEPT
+{% if firewall_server_network %}
+-A OUTPUT -p udp -d {{ firewall_server_network }} --dport 53 -j ACCEPT -m comment --comment "Allow outgoing DNS to {{ firewall_server_network }}"
+{% else %}
+-A OUTPUT -p udp --dport 53 -j ACCEPT -m comment --comment "Allow outgoing DNS to everywhere"
+{% endif %}
 # return packages accepted due to "RELATED"
-# TODO: limit to SRV LAN
 
 # outgoing: SMTP
--A OUTPUT  -p tcp --dport 25 -m state --state NEW,ESTABLISHED -j LOG_AND_ACCEPT
-# return packages accepted due to "RELATED"
-# TODO: limit to SRV LAN
+{% if firewall_server_network %}
+-A OUTPUT  -p tcp -d {{ firewall_server_network }} --dport 25 -m state --state NEW,ESTABLISHED -j LOG_AND_ACCEPT -m comment --comment "Allow outgoing SMTP to {{ firewall_server_network }}"
+{% else %}
+-A OUTPUT  -p tcp --dport 25 -m state --state NEW,ESTABLISHED -j LOG_AND_ACCEPT -m comment --comment "Allow outgoing SMTP to everywhere"
+{% endif %}
+# return packages accepted due to "ESTABLISHED"
 
 # outgoing: HTTP
--A OUTPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j LOG_AND_ACCEPT
-# return packages accepted due to "RELATED"
+{% if firewall_server_network %}
+-A OUTPUT -p tcp -d {{ firewall_server_network }} --dport 80 -m state --state NEW,ESTABLISHED -j LOG_AND_ACCEPT -m comment --comment "Allow outgoing HTTP (e.g. for updates) to {{ firewall_server_network }}"
+{% else %}
+-A OUTPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j LOG_AND_ACCEPT -m comment --comment "Allow outgoing HTTP (e.g. for updates) to everywhere"
+{% endif %}
+# return packages accepted due to "ESTABLISHED"
 # needed due to updates
-# TODO: limit to SRV LAN
 
 # allow OUTPUT to this network
 {% if firewall_allow_all_output_network %}
--A OUTPUT -d {{ firewall_allow_all_output_network}} --j ACCEPT
+-A OUTPUT -d {{ firewall_allow_all_output_network}} --j ACCEPT -m comment --comment "Allow all outgoing to everywhere {{firewall_allow_all_output_network}}"
 {% endif %}
 
+# auxilary chains for user stuff
+-A OUTPUT -j EXTRA_OUT -m comment --comment "Allow for dynamic user additions of output rules"
+-A INPUT  -j EXTRA_IN  -m comment --comment "Allow for dynamic user additions of input rules"
+
 # everything else is logged
--A OUTPUT -j LOG_AND_DROP
--A INPUT -j LOG_AND_DROP
+-A OUTPUT -j LOG_AND_DROP -m comment --comment "Log and drop everything outgoing not mentioned above"
+-A INPUT  -j LOG_AND_DROP -m comment --comment "Log and drop everything incoming not mentioned above"
 
 COMMIT
