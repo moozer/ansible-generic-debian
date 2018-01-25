@@ -74,8 +74,11 @@ firewall_drop_all_ip6: true
 firewall_drop_all_ip4: false
 
 # blanked ACCEPT outgoing to this IP range.
-# use 0.0.0.0/0 for everything
-firewall_allow_all_output_network: 0.0.0.0/0
+# use 0.0.0.0/0 for everything, or empty for none
+firewall_allow_all_output_network: 
+#firewall_allow_all_output_network: 0.0.0.0/0
 
 # Limit SMTP, DNS and so on to acces this network only
 firewall_server_network: 0.0.0.0/0
+# add rules to allow dhcp
+firewall_allow_dhcp: true
