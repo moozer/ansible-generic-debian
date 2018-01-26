@@ -14,7 +14,7 @@ generic_manage_unattended_upgrade: true
 
 # apt.yml relates
 generic_manage_apt: true
-apt_proxy_url: 
+apt_proxy_url:
 apt_release: "{{ apt_default_release }}"
 apt_do_update_list: true
 apt_include_testing: true
@@ -24,3 +24,6 @@ apt_do_upgrades: false # perhaps a candidate for --extra-vars
 # some random repo for testing
 apt_other_repos:
   - "deb http://http.us.debian.org/debian sid main non-free contrib"
+
+# this should cover almost all normal vagrant setups 
+firewall_server_network: 192.168.123.0/16
