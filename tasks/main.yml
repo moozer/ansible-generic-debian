@@ -21,3 +21,8 @@
   import_tasks: smtp.yml
   when: generic_manage_smtp
   tags: smtp
+
+- name: add iptables firewall
+  import_tasks: iptables.yml
+  when: generic_manage_firewall
+  tags: firewall

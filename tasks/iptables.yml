@@ -1,0 +1,42 @@
+- name: install iptables related packages
+  apt: name={{item}} state=present
+  with_items:
+    - iptables-persistent
+
+- name: upload iptables restore file (v4)
+  template:
+    src: iptables_rules.v4.j2
+    dest: /etc/iptables/rules.v4
+    mode: 0600
+    owner: root
+    group: root
+  register: iptables_rules_v4_result
+  when: not firewall_drop_all_ip4
+
+- name: upload iptables drop all file (v4)
+  template:
+    src: iptables_rules_drop_all.j2
+    dest: /etc/iptables/rules.v4
+    mode: 0600
+    owner: root
+    group: root
+  register: iptables_rules_da_v4_result
+  when: firewall_drop_all_ip4
+
+- name: restore iptables rules (v4)
+  command: iptables-restore /etc/iptables/rules.v4
+  when: iptables_rules_v4_result.changed or iptables_rules_da_v4_result.changed
+
+- name: upload iptables drop all file (v6)
+  template:
+    src: iptables_rules_drop_all.j2
+    dest: /etc/iptables/rules.v6
+    mode: 0600
+    owner: root
+    group: root
+  register: iptables_rules_v6_result
+  when: firewall_drop_all_ip6
+
+- name: restore iptables rules (v6)
+  command: ip6tables-restore /etc/iptables/rules.v6
+  when: firewall_drop_all_ip6 and iptables_rules_v6_result.changed

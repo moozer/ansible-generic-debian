@@ -62,3 +62,36 @@ apt_do_update_list: true
 
 # include repos from testing
 apt_include_testing: true
+
+#
+# defaults for handling firewall rules
+#
+generic_manage_firewall: true
+
+# drop ip4 or ip6 in iptables.
+# don't use both, and tweak sysctl also
+firewall_drop_all_ip6: true
+firewall_drop_all_ip4: false
+
+# blanked ACCEPT outgoing to this IP range.
+# use 0.0.0.0/0 for everything, or empty for none
+# e.g firewall_allow_all_output_network: 0.0.0.0/0
+firewall_allow_all_output_network:
+
+# Limit SMTP, DNS and so on to acces this network only
+firewall_server_network: 0.0.0.0/0
+# add rules to allow dhcp
+firewall_allow_dhcp: true
+# allow certain outgping stuff
+firewall_outgoing_services:
+  - {name: SMTP,    proto: tcp, port: 25, comment: "outgoing mails"}
+  - {name: HTTP,    proto: tcp, port: 80, comment: "outgoing e.g. for updates"}
+  - {name: DNS/udp, proto: udp, port: 53, comment: "outgoing DNS using UDP"}
+  - {name: DNS/tcp, proto: tcp, port: 53, comment: "outgoing DNS using TCP"}
+# allow certain incoming stuff.
+# - SSH and ping is always enabled
+# - DHCP has its own switch
+firewall_incoming_services: []
+# example
+#firewall_incoming_services:
+#  - {name: SMTP, proto: TCP, port: 25, limit: "60/min", burst: 5, comment: "incoming mails"}
