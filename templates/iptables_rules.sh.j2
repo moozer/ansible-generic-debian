@@ -41,21 +41,21 @@ iptables -A OUTPUT -m conntrack --ctstate INVALID -j LOG_AND_DROP
 # incoming: ssh
 {% if firewall_server_network %}
 iptables -A INPUT  -p tcp -d {{ firewall_server_network }} --dport 22 \
-         -m state --state NEW,ESTABLISHED \
+         -m state --state NEW \
          -j ACCEPT \
          -m comment --comment "SSH incoming from {{ firewall_server_network }} - no limit"
 iptables -A OUTPUT -p tcp -d {{ firewall_server_network }} --sport 22 \
-         -m state --state ESTABLISHED \
+         -m state --state NEW \
          -j ACCEPT \
          -m comment --comment "SSH incoming from {{ firewall_server_network }} - no limit"
 {% else %}
 iptables -A INPUT  -p tcp --dport 22 \
-         -m state --state NEW,ESTABLISHED \
+         -m state --state NEW \
          -m limit --limit 12/min \
          -j ACCEPT \
          -m comment --comment "SSH incoming - limited"
 iptables -A OUTPUT -p tcp --sport 22 \
-         -m state --state ESTABLISHED \
+         -m state --state NEW \
          -j ACCEPT \
          -m comment --comment "SSH incoming - limited"
 {% endif %}
@@ -80,7 +80,7 @@ iptables -A SERVICE_IN -p icmp --icmp-type echo-request \
 # {{service.comment}}
 iptables -A SERVICE_IN -p {{service.proto}} -s {{ service.network }} --dport {{service.port}} \
          -m limit --limit {{ service.limit }} \
-         {{ "-m state --state NEW,ESTABLISHED" if service.proto == "tcp" }} \
+         {{ "-m state --state NEW" if service.proto == "tcp" }} \
          -j ACCEPT \
          -m comment --comment "{{service.comment}}"
 {% endfor %}
@@ -90,12 +90,12 @@ iptables -A SERVICE_IN -p {{service.proto}} -s {{ service.network }} --dport {{s
 # {{service.comment}}
 {% if firewall_server_network %}
 iptables -A SERVICE_OUT -p {{service.proto}} -d {{ firewall_server_network }} --dport {{service.port}} \
-         {{ "-m state --state NEW,ESTABLISHED" if service.proto == "tcp" else ""}} \
+         {{ "-m state --state NEW" if service.proto == "tcp" else ""}} \
          -j ACCEPT \
          -m comment --comment "{{service.comment}}"
 {% else %}
 iptables -A SERVICE_OUT -p {{service.proto}} --dport {{service.port}} \
-         {{ "-m state --state NEW,ESTABLISHED" if service.proto == "tcp" else "" }} \
+         {{ "-m state --state NEW" if service.proto == "tcp" else "" }} \
          -j ACCEPT \
          -m comment --comment "{{service.comment}}"
 {% endif %}
