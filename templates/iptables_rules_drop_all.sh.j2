@@ -1,0 +1,25 @@
+#!/bin/sh
+# drop all ipv4
+# yes it will block almost all internet traffic
+
+PATH='/sbin'
+
+# Flush the tables to apply changes
+iptables -F
+
+# chain: LOG_AND_DROP
+iptables -N LOG_AND_DROP
+iptables -A LOG_AND_DROP \
+          -m limit --limit 60/min \
+          -j LOG --log-prefix "ip6tables drop all: " --log-level 7
+iptables -A LOG_AND_DROP -j DROP
+
+# Default policy to drop 'everything' but our output to internet
+iptables -P FORWARD DROP
+iptables -P INPUT   DROP
+iptables -P OUTPUT  DROP
+
+# log all transgressions
+iptables -A FORWARD -j LOG_AND_DROP
+iptables -A OUTPUT  -j LOG_AND_DROP
+iptables -A INPUT   -j LOG_AND_DROP

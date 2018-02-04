@@ -1,0 +1,134 @@
+#!/bin/sh
+# firewall rules for ipv4
+
+PATH='/sbin'
+
+# Flush the tables to apply changes
+iptables -F
+iptables -X
+
+# default policies
+iptables -P FORWARD DROP
+iptables -P INPUT   DROP
+iptables -P OUTPUT  DROP
+
+# allow all on loopback
+iptables -A INPUT  -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+# chain: LOG_AND_DROP
+iptables -N LOG_AND_DROP
+iptables -A LOG_AND_DROP \
+         -m limit --limit 60/min \
+         -j LOG --log-prefix "iptables drop: " --log-level 7
+iptables -A LOG_AND_DROP -j DROP
+
+# chain: LOG_AND_ACCEPT
+iptables -N LOG_AND_ACCEPT
+iptables -A LOG_AND_ACCEPT \
+         -m limit --limit 60/min \
+         -j LOG --log-prefix "iptables accept: " --log-level 7
+iptables -A LOG_AND_ACCEPT -j ACCEPT
+
+# allow established connections
+iptables -A INPUT  -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# disallow invalid states
+iptables -A INPUT  -m conntrack --ctstate INVALID -j LOG_AND_DROP
+iptables -A OUTPUT -m conntrack --ctstate INVALID -j LOG_AND_DROP
+
+# incoming: ssh
+{% if firewall_server_network %}
+iptables -A INPUT  -p tcp -d {{ firewall_server_network }} --dport 22 \
+         -m state --state NEW,ESTABLISHED \
+         -j ACCEPT \
+         -m comment --comment "SSH incoming from {{ firewall_server_network }} - no limit"
+iptables -A OUTPUT -p tcp -d {{ firewall_server_network }} --sport 22 \
+         -m state --state ESTABLISHED \
+         -j ACCEPT \
+         -m comment --comment "SSH incoming from {{ firewall_server_network }} - no limit"
+{% else %}
+iptables -A INPUT  -p tcp --dport 22 \
+         -m state --state NEW,ESTABLISHED \
+         -m limit --limit 12/min \
+         -j ACCEPT \
+         -m comment --comment "SSH incoming - limited"
+iptables -A OUTPUT -p tcp --sport 22 \
+         -m state --state ESTABLISHED \
+         -j ACCEPT \
+         -m comment --comment "SSH incoming - limited"
+{% endif %}
+
+# auxilary chains for ansible defined stuff
+iptables -N SERVICE_OUT
+iptables -N SERVICE_IN
+
+iptables -A OUTPUT -j SERVICE_OUT \
+         -m comment --comment "Allow outgoing services"
+iptables -A INPUT  -j SERVICE_IN \
+         -m comment --comment "Allow incoming services"
+
+# incoming: ping host
+iptables -A SERVICE_IN -p icmp --icmp-type echo-request \
+         -m limit --limit 60/min \
+         -j ACCEPT
+# return packages accepted due to "RELATED"
+
+# incoming services
+{% for service in firewall_incoming_services %}
+# {{service.comment}}
+iptables -A SERVICE_IN -p {{service.proto}} -s {{ service.network }} --dport {{service.port}} \
+         -m limit --limit {{ service.limit }} \
+         {{ "-m state --state NEW,ESTABLISHED" if service.proto == "tcp" }} \
+         -j ACCEPT \
+         -m comment --comment "{{service.comment}}"
+{% endfor %}
+
+# outgoing services
+{% for service in firewall_outgoing_services %}
+# {{service.comment}}
+{% if firewall_server_network %}
+iptables -A SERVICE_OUT -p {{service.proto}} -d {{ firewall_server_network }} --dport {{service.port}} \
+         {{ "-m state --state NEW,ESTABLISHED" if service.proto == "tcp" else ""}} \
+         -j ACCEPT \
+         -m comment --comment "{{service.comment}}"
+{% else %}
+iptables -A SERVICE_OUT -p {{service.proto}} --dport {{service.port}} \
+         {{ "-m state --state NEW,ESTABLISHED" if service.proto == "tcp" else "" }} \
+         -j ACCEPT \
+         -m comment --comment "{{service.comment}}"
+{% endif %}
+{% endfor %}
+
+# allow OUTPUT to this network
+{% if firewall_allow_all_output_network %}
+iptables -A SERVICE_OUT -d {{ firewall_allow_all_output_network}} \
+         -j ACCEPT \
+         -m comment --comment "Allow all outgoing to everywhere {{firewall_allow_all_output_network}}"
+{% endif %}
+
+# allow DHCP
+{% if firewall_allow_dhcp %}
+# iptables cannot blocjk outgoing dhcp requests. It is a design and L2/L3 thing
+iptables -A SERVICE_IN -p udp --dport 67:68 --sport 67:68 \
+         -j ACCEPT \
+         -m comment --comment "Allow DHCP"
+{% else %}
+# no rules for DHCP added due to ansible switch "firewall_allow_dhcp"
+{% endif %}
+
+# auxilary chains for user stuff
+iptables -N EXTRA_IN
+iptables -N EXTRA_OUT
+
+iptables -A OUTPUT -j EXTRA_OUT \
+         -m comment --comment "Allow for dynamic user additions of output rules"
+iptables -A INPUT  -j EXTRA_IN  \
+         -m comment --comment "Allow for dynamic user additions of input rules"
+
+# everything else is logged
+iptables -A OUTPUT -j LOG_AND_DROP \
+         -m comment --comment "Log and drop everything outgoing not mentioned above"
+iptables -A INPUT  -j LOG_AND_DROP \
+         -m comment --comment "Log and drop everything incoming not mentioned above"
