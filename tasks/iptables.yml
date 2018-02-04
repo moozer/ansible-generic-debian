@@ -1,42 +1,74 @@
-- name: install iptables related packages
-  apt: name={{item}} state=present
+- name: uninstall iptables persistence
+  apt: name={{item}} state=absent
   with_items:
     - iptables-persistent
 
-- name: upload iptables restore file (v4)
+# this is done to enable ansible to continue after applying firewall rules
+# otherwise it still when service is reloaded
+- name: enable connection tracking
+  modprobe: name=nf_conntrack state=present
+
+- name: ensure iptables config dir exists
+  file:
+    path: /etc/iptables
+    state: directory
+    mode: 0755
+
+- name: upload iptables script file (v4)
   template:
-    src: iptables_rules.v4.j2
-    dest: /etc/iptables/rules.v4
-    mode: 0600
+    src: iptables_rules.sh.j2
+    dest: /etc/iptables/iptables_rules.sh
+    mode: 0700
     owner: root
     group: root
   register: iptables_rules_v4_result
   when: not firewall_drop_all_ip4
+  notify: reapply iptables
 
-- name: upload iptables drop all file (v4)
+# - name: restore iptables rules (v4)
+#   command: /etc/iptables/iptables_rules.sh
+#   when: (not firewall_drop_all_ip4) and iptables_rules_v4_result.changed
+
+- name: upload iptables drop all script (v4)
   template:
-    src: iptables_rules_drop_all.j2
-    dest: /etc/iptables/rules.v4
-    mode: 0600
+    src: iptables_rules_drop_all.sh.j2
+    dest: /etc/iptables/iptables_rules_drop_all.sh
+    mode: 0700
     owner: root
     group: root
-  register: iptables_rules_da_v4_result
+  register: iptables_rules_drop_all_v4_result
   when: firewall_drop_all_ip4
+  notify: reapply iptables
 
-- name: restore iptables rules (v4)
-  command: iptables-restore /etc/iptables/rules.v4
-  when: iptables_rules_v4_result.changed or iptables_rules_da_v4_result.changed
+# - name: restore iptables rules (v4)
+#   command: iptables-restore /etc/iptables/rules.v4
+#   when: iptables_rules_v4_result.changed or iptables_rules_drop_all_v4_result.changed
 
 - name: upload iptables drop all file (v6)
   template:
-    src: iptables_rules_drop_all.j2
-    dest: /etc/iptables/rules.v6
-    mode: 0600
+    src: ip6tables_rules_drop_all.sh.j2
+    dest: /etc/iptables/ip6tables_rules_drop_all.sh
+    mode: 0700
     owner: root
     group: root
   register: iptables_rules_v6_result
   when: firewall_drop_all_ip6
+  notify: reapply ip6tables
 
-- name: restore iptables rules (v6)
-  command: ip6tables-restore /etc/iptables/rules.v6
-  when: firewall_drop_all_ip6 and iptables_rules_v6_result.changed
+# - name: restore iptables rules (v6)
+#   command: /etc/iptables/ip6tables_rules_drop_all.sh
+#   when: firewall_drop_all_ip6 and iptables_rules_v6_result.changed
+#
+- name: add ip6tables systemd service
+  template:
+    dest: "/etc/systemd/system/{{item}}.service"
+    src: "{{item}}.service.j2"
+  with_items:
+    - iptables
+    - ip6tables
+
+- name: enable iptables system services
+  service: name={{item}} enabled=true
+  with_items:
+    - iptables
+    - ip6tables

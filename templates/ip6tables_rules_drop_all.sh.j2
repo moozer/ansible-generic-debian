@@ -1,0 +1,24 @@
+#!/bin/sh
+# drop all ipv6
+
+PATH='/sbin'
+
+# Flush the tables to apply changes
+ip6tables -F
+
+# chain: LOG_AND_DROP
+ip6tables -N LOG_AND_DROP
+ip6tables -A LOG_AND_DROP \
+          -m limit --limit 60/min \
+          -j LOG --log-prefix "ip6tables drop all: " --log-level 7
+ip6tables -A LOG_AND_DROP -j DROP
+
+# Default policy to drop 'everything' but our output to internet
+ip6tables -P FORWARD DROP
+ip6tables -P INPUT   DROP
+ip6tables -P OUTPUT  DROP
+
+# log all transgressions
+ip6tables -A FORWARD -j LOG_AND_DROP
+ip6tables -A OUTPUT  -j LOG_AND_DROP
+ip6tables -A INPUT   -j LOG_AND_DROP
