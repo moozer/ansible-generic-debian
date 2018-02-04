@@ -3,6 +3,17 @@
   with_items:
     - iptables-persistent
 
+# this is done to enable ansible to continue after applying firewall rules
+# otherwise it still when service is reloaded
+- name: enable connection tracking
+  modprobe: name=nf_conntrack state=present
+
+- name: ensure iptables config dir exists
+  file:
+    path: /etc/iptables
+    state: directory
+    mode: 0755
+
 - name: upload iptables script file (v4)
   template:
     src: iptables_rules.sh.j2
