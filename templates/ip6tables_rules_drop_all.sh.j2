@@ -1,0 +1,12 @@
+#!/bin/sh
+# drop all ipv6
+
+PATH='/sbin'
+
+# Flush the tables to apply changes
+ip6tables -F
+
+# Default policy to drop 'everything' but our output to internet
+ip6tables -P FORWARD DROP
+ip6tables -P INPUT   DROP
+ip6tables -P OUTPUT  DROP
