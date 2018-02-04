@@ -1,0 +1,13 @@
+[Unit]
+Description=Add Firewall Rules to ip6tables
+
+[Service]
+Type=oneshot
+{% if firewall_drop_all_ip6 %}
+ExecStart=/etc/iptables/ip6tables_rules_drop_all.sh
+{% else %}
+ExecStart=/etc/iptables/ip6tables_rules.sh
+{% endif %}
+
+[Install]
+WantedBy=multi-user.target

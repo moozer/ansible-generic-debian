@@ -1,0 +1,13 @@
+[Unit]
+Description=Add Firewall Rules to iptables
+
+[Service]
+Type=oneshot
+{% if firewall_drop_all_ip4 %}
+ExecStart=/etc/iptables/iptables_rules_drop_all.sh
+{% else %}
+ExecStart=/etc/iptables/iptables_rules.sh
+{% endif %}
+
+[Install]
+WantedBy=multi-user.target

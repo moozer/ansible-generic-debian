@@ -6,3 +6,9 @@
 
 - name: reload exim4
   service: name=exim4 state=reloaded
+
+- name: reapply iptables
+  service: name=iptables state=reloaded
+
+- name: reapply ip6tables
+  service: name=ip6tables state=reloaded
