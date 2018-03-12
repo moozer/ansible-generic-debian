@@ -95,3 +95,11 @@ firewall_incoming_services: []
 # example
 #firewall_incoming_services:
 #  - {name: SMTP, proto: TCP, port: 25, limit: "60/min", burst: 5, comment: "incoming mails"}
+
+#
+# defaults for handling sshd
+#
+generic_manage_sshd: true
+
+sshd_users:
+- "{{ ansible_ssh_user }}"

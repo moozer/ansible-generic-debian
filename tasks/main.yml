@@ -26,3 +26,7 @@
   import_tasks: iptables.yml
   when: generic_manage_firewall
   tags: firewall
+
+- import_tasks: sshd.yml
+  when: generic_manage_sshd
+  tags: ssh
