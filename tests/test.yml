@@ -1,6 +1,7 @@
 - hosts: debian-*
   become: yes
   user: vagrant
+  gather_facts: false
 
   roles:
   - generic-debian
@@ -19,6 +20,7 @@
 - hosts: mail
   become: yes
   user: vagrant
+  gather_facts: false
 
   tasks:
   - name: update hosts file
