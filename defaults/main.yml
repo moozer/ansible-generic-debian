@@ -101,5 +101,7 @@ firewall_incoming_services: []
 #
 generic_manage_sshd: true
 
+# flags for the users:
+# warning: Yes and yes is not the same. Use "yes" or "no" - lowercase and with quotes
 sshd_users:
-  - { username: "{{ansible_ssh_user}}", AllowTcpForwarding: yes, PermitTTY: yes }
+  - { username: "{{ansible_ssh_user}}", AllowTcpForwarding: "yes", PermitTTY: "yes" }

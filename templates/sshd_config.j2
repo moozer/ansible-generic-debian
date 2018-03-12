@@ -12,7 +12,7 @@ ChallengeResponseAuthentication no
 UsePAM yes
 
 X11Forwarding no
-PermitTTY no
+PermitTTY yes
 PrintMotd no
 UseDNS no
 PermitRootLogin no
@@ -25,10 +25,9 @@ Subsystem	sftp	/usr/lib/openssh/sftp-server
 
 # going through the ssh_users list
 {% for user in sshd_users %}
-{{ user }}
 Match User {{ user['username'] }}
 {% for option in user.keys() | difference( ['username'])%}
-       {{ option }}: {{user[option]}}
+       {{ option }} {{user[option]}}
 {% endfor %}
 #	ForceCommand cvs server
 
