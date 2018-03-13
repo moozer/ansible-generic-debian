@@ -76,7 +76,7 @@ ldap_binddn:  cn=admin,dcmydomain,dc=com
 ldap_bindpw: somepassword
 ```
 
-ssh daemon
+sshd daemon
 ---------------
 
 This relates to configuring logging in to the host, not outgoing.
@@ -99,3 +99,29 @@ sshd_users:
 ```
 
 This is a list, and may be more than one entry. The options and the associated value is copied directly to the `sshd_config` file. Default is to disallow ttys and forwarding - ie. not very usefull. See `an sshd_config` for the list of options
+
+Networking
+--------------------
+
+This is basic config using `/etc/network/interfaces`, and may set DHCP and gateway and such.
+
+Note: Default false, since it might cause lost of connectvity
+
+```
+generic_manage_network: false
+```
+
+define interfaces.
+- gateway empty or None => no gateway set
+- static_ip empty or None => dhcp
+
+```
+interfaces:
+  ens3:
+    subnet:
+      description: "int_LAN - internal network"
+      gateway: 192.168.0.1
+      subnet: "192.168.0.0/24"
+    static_ip: 192.168.0.10
+```
+The structure with `subnet` allows for defining it in e.g. `group_vars/all` and reuse it for multiple machines
