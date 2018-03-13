@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# utility script to add chosen ips to the interface
+# without toucing the current ip
+
+{% for int in interfaces.keys() %}
+{% if interfaces[int].static_ip %}
+ip addr add {{interfaces[int].static_ip}}/{{interfaces[int].subnet.subnet  | ipaddr('prefix') }} dev {{ int }}
+{% endif %}
+{% endfor %}

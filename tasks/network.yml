@@ -1,0 +1,14 @@
+- name: configure network/interfaces
+  template:
+    src: interfaces.j2
+    dest: /etc/network/interfaces
+
+- name: configure network/interfaces - each interface
+  template:
+    src: interfaces_d.j2
+    dest: /etc/network/interfaces.d/ansible
+
+- name: upload add ips scripts
+  template:
+    src: network_ips.sh.j2
+    dest: /etc/network_ips.sh

@@ -25,5 +25,11 @@ apt_do_upgrades: false # perhaps a candidate for --extra-vars
 apt_other_repos:
   - "deb http://http.us.debian.org/debian sid main non-free contrib"
 
-# this should cover almost all normal vagrant setups 
-firewall_server_network: 192.168.123.0/16
+# subnet to use
+vagrant_subnet:
+  description: "avgrant_subnet - internal network for vagrant"
+  gateway: 192.168.123.1
+  subnet: "192.168.123.0/24"
+
+# this should cover almost all normal vagrant setups
+firewall_server_network: "{{vagrant_subnet.subnet}}"

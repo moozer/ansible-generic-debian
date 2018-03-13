@@ -6,3 +6,10 @@ smtp_sender_fqdn: jessie
 
 apt_current_testing: stretch
 apt_current_stable: jessie
+
+interfaces:
+  eth0:
+    subnet: "{{vagrant_subnet}}"
+    static_ip: 192.168.123.201
+
+generic_manage_network: true

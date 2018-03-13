@@ -6,3 +6,10 @@ smtp_sender_fqdn: stretch
 
 apt_current_testing: buster
 apt_current_stable: stretch
+
+interfaces:
+  ens5:
+    subnet: "{{vagrant_subnet}}"
+    static_ip: 192.168.123.200
+
+generic_manage_network: true
