@@ -12,3 +12,6 @@
 
 - name: reapply ip6tables
   service: name=ip6tables state=reloaded
+
+- name: restart sshd
+  service: name=sshd state=restarted

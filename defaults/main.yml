@@ -95,3 +95,13 @@ firewall_incoming_services: []
 # example
 #firewall_incoming_services:
 #  - {name: SMTP, proto: TCP, port: 25, limit: "60/min", burst: 5, comment: "incoming mails"}
+
+#
+# defaults for handling sshd
+#
+generic_manage_sshd: true
+
+# flags for the users:
+# warning: Yes and yes is not the same. Use "yes" or "no" - lowercase and with quotes
+sshd_users:
+  - { username: "{{ansible_ssh_user}}", AllowTcpForwarding: "yes", PermitTTY: "yes" }

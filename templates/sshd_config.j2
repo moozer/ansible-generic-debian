@@ -1,0 +1,34 @@
+# This is the sshd server system-wide configuration file.  See
+# sshd_config(5) for more information.
+
+# Managed by ansible
+
+#Port 22
+#AddressFamily any
+#ListenAddress 0.0.0.0
+#ListenAddress ::
+
+ChallengeResponseAuthentication no
+UsePAM yes
+
+X11Forwarding no
+PermitTTY no
+PrintMotd no
+UseDNS no
+PermitRootLogin no
+PasswordAuthentication no
+
+AcceptEnv LANG LC_*
+
+# override default of no subsystems
+Subsystem	sftp	/usr/lib/openssh/sftp-server
+
+# going through the ssh_users list
+{% for user in sshd_users %}
+Match User {{ user['username'] }}
+{% for option in user.keys() | difference( ['username'])%}
+       {{ option }} {{user[option]}}
+{% endfor %}
+#	ForceCommand cvs server
+
+{% endfor %}
