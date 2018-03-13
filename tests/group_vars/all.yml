@@ -25,5 +25,12 @@ apt_do_upgrades: false # perhaps a candidate for --extra-vars
 apt_other_repos:
   - "deb http://http.us.debian.org/debian sid main non-free contrib"
 
-# this should cover almost all normal vagrant setups 
-firewall_server_network: 192.168.123.0/16
+# subnet to use
+vagrant_net: "{{ ansible_default_ipv4.network }}/{{ ansible_default_ipv4.netmask }}"
+vagrant_subnet:
+  description: "avgrant_subnet - internal network for vagrant"
+  gateway: "{{ansible_default_ipv4.gateway}}"
+  subnet: "{{vagrant_net | ipaddr('net')}}"
+
+# this should cover almost all normal vagrant setups
+firewall_server_network: "{{vagrant_subnet.subnet}}"

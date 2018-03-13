@@ -1,0 +1,14 @@
+{% for int in interfaces.keys() %}
+
+# {{ interfaces[int].subnet.description }}
+auto {{ int }}
+{% if interfaces[int].static_ip is defined %}
+iface {{int}} inet static
+    address {{interfaces[int].static_ip}}
+    netmask {{ interfaces[int].subnet.subnet | ipaddr('netmask') }}
+    gateway {{interfaces[int].subnet.gateway}}
+
+{% else %}
+iface {{ int }} inet dhcp
+{% endif %}
+{% endfor %}

@@ -1,0 +1,20 @@
+- name: configure network/interfaces
+  template:
+    src: interfaces.j2
+    dest: /etc/network/interfaces
+
+- name: configure network/interfaces - each interface
+  template:
+    src: interfaces_d.j2
+    dest: /etc/network/interfaces.d/ansible
+  register: int_changed
+
+- name: upload add ips scripts
+  template:
+    src: network_ips.sh.j2
+    dest: /etc/network_ips.sh
+    mode: 0755
+
+- name: adding ips to interfaces
+  command: /etc/network_ips.sh
+  when: int_changed.changed

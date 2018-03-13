@@ -30,3 +30,7 @@
 - import_tasks: sshd.yml
   when: generic_manage_sshd
   tags: ssh
+
+- import_tasks: network.yml
+  when: generic_manage_network
+  tags: network

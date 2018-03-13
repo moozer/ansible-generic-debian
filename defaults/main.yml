@@ -105,3 +105,19 @@ generic_manage_sshd: true
 # warning: Yes and yes is not the same. Use "yes" or "no" - lowercase and with quotes
 sshd_users:
   - { username: "{{ansible_ssh_user}}", AllowTcpForwarding: "yes", PermitTTY: "yes" }
+
+#
+# defaults for handling networks
+# * default false, since it might cause lost of connectvity
+generic_manage_network: false
+
+# define interfaces.
+# - gateway empty or None => no gateway set
+# - static_ip empty or None => dhcp
+interfaces:
+  ens3:
+    subnet:
+      description: "int_LAN - internal network"
+      gateway: 192.168.0.1
+      subnet: "192.168.0.0/24"
+    static_ip: 192.168.0.10
