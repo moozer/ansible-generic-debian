@@ -10,6 +10,6 @@ apt_current_stable: jessie
 interfaces:
   eth0:
     subnet: "{{vagrant_subnet}}"
-    static_ip: 192.168.123.201
+    static_ip: "{{ansible_eth0.ipv4.address}}"
 
 generic_manage_network: true

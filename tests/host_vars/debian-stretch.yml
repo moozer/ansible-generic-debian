@@ -10,6 +10,6 @@ apt_current_stable: stretch
 interfaces:
   ens5:
     subnet: "{{vagrant_subnet}}"
-    static_ip: 192.168.123.200
+    static_ip: "{{ansible_ens5.ipv4.address}}"
 
 generic_manage_network: true

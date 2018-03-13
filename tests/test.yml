@@ -1,7 +1,6 @@
 - hosts: debian-*
   become: yes
   user: vagrant
-  gather_facts: false
 
   roles:
   - generic-debian
