@@ -75,3 +75,27 @@ ldap_basedc: dc=mydomain,dc=cm
 ldap_binddn:  cn=admin,dcmydomain,dc=com
 ldap_bindpw: somepassword
 ```
+
+ssh daemon
+---------------
+
+This relates to configuring logging in to the host, not outgoing.
+
+Basic config is very restrictive, and allows for specific named users to have other permissions. This uses the `Match user` option in sshd_config
+
+#### vars
+
+Enable/disable sshd config
+
+```
+generic_manage_sshd: true
+```
+
+Add users with special permission
+
+```
+sshd_users:
+  - { username: "{{ansible_ssh_user}}", AllowTcpForwarding: "yes", PermitTTY: "yes" }
+```
+
+This is a list, and may be more than one entry. The options and the associated value is copied directly to the `sshd_config` file. Default is to disallow ttys and forwarding - ie. not very usefull. See `an sshd_config` for the list of options
