@@ -5,6 +5,9 @@
 
 {% for int in interfaces.keys() %}
 {% if interfaces[int].static_ip %}
-ip addr add {{interfaces[int].static_ip}}/{{interfaces[int].subnet.subnet  | ipaddr('prefix') }} dev {{ int }}
+if ! ip addr show dev {{int}} | grep {{interfaces[int].static_ip}} > /dev/null; then
+    echo adding IP {{interfaces[int].static_ip}} to {{int}}
+    ip addr add {{interfaces[int].static_ip}}/{{interfaces[int].subnet.subnet  | ipaddr('prefix') }} dev {{ int }}
+fi
 {% endif %}
 {% endfor %}
