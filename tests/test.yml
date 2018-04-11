@@ -2,6 +2,11 @@
   become: yes
   user: vagrant
 
+  pre_tasks:
+  - name: updating package list (if old)
+    apt: update_cache=yes cache_valid_time=3600
+    tags: apt
+
   roles:
   - generic-debian
 
@@ -20,6 +25,11 @@
   become: yes
   user: vagrant
   gather_facts: false
+
+  pre_tasks:
+  - name: updating package list (if old)
+    apt: update_cache=yes cache_valid_time=3600
+    tags: apt
 
   tasks:
   - name: update hosts file

@@ -23,9 +23,10 @@ if the proxy var is not empty, it gets included in apt.conf
 apt_proxy_url: http://someproxyserver:9999
 
 apt_default_release: jessie
-apt_do_update_list: true
 apt_include_testing: false
 ```
+
+The role will update package lists, if it changes the repo, otherwise not.
 
 smtp
 --------------------
