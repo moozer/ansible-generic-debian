@@ -13,3 +13,6 @@ interfaces:
     static_ip: "{{ansible_eth0.ipv4.address}}"
 
 generic_manage_network: true
+
+sshd_users:
+  - { username: "{{ansible_ssh_user}}", AllowTcpForwarding: "yes", PermitTTY: "yes" }

@@ -5,4 +5,10 @@
     owner: root
     group: root
     mode: 0644
+  register: sshd_config_update
+
+- name: check config
+  command: /usr/sbin/sshd -t
+  when: sshd_config_update.changed
+  register: sshd_config_check
   notify: restart sshd
