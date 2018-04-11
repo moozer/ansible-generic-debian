@@ -16,7 +16,6 @@ generic_manage_unattended_upgrade: true
 generic_manage_apt: true
 apt_proxy_url:
 apt_release: "{{ apt_default_release }}"
-apt_do_update_list: true
 apt_include_testing: true
 
 apt_do_upgrades: false # perhaps a candidate for --extra-vars
