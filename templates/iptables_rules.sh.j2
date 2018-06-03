@@ -78,9 +78,10 @@ iptables -A SERVICE_IN -p icmp --icmp-type echo-request \
 # incoming services
 {% for service in firewall_incoming_services %}
 # {{service.comment}}
-iptables -A SERVICE_IN -p {{service.proto}} -s {{ service.network }} --dport {{service.port}} \
+iptables -A SERVICE_IN -p {{service.proto}} --dport {{service.port}} \
+         {{ "-s {{ service.network }}" if service.network is defined else "" }} \
          -m limit --limit {{ service.limit }} \
-         {{ "-m state --state NEW" if service.proto == "tcp" }} \
+         {{ "-m state --state NEW" if service.proto == "tcp" else ""}} \
          -j ACCEPT \
          -m comment --comment "{{service.comment}}"
 {% endfor %}
