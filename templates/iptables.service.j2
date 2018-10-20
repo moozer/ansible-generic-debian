@@ -10,6 +10,7 @@ ExecStart=/etc/iptables/iptables_rules.sh
 {% endif %}
 Restart=always
 RestartSec=3
+RemainAfterExit=true
 
 [Install]
 WantedBy=multi-user.target
