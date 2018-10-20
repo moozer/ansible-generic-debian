@@ -2,12 +2,14 @@
 Description=Add Firewall Rules to iptables
 
 [Service]
-Type=oneshot
+Type=simple
 {% if firewall_drop_all_ip4 %}
 ExecStart=/etc/iptables/iptables_rules_drop_all.sh
 {% else %}
 ExecStart=/etc/iptables/iptables_rules.sh
 {% endif %}
+Restart=always
+RestartSec=3
 
 [Install]
 WantedBy=multi-user.target

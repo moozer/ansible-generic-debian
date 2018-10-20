@@ -2,12 +2,14 @@
 Description=Add Firewall Rules to ip6tables
 
 [Service]
-Type=oneshot
+Type=simple
 {% if firewall_drop_all_ip6 %}
 ExecStart=/etc/iptables/ip6tables_rules_drop_all.sh
 {% else %}
 ExecStart=/etc/iptables/ip6tables_rules.sh
 {% endif %}
+Restart=always
+RestartSec=3
 
 [Install]
 WantedBy=multi-user.target
