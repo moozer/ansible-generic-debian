@@ -45,18 +45,13 @@ generic_manage_apt: true
 apt_current_testing: stretch
 apt_current_stable: jessie
 apt_default_release: "{{apt_current_stable}}"
+apt_repo_releases: "{{ [apt_current_testing, apt_current_stable] if  apt_include_testing else [apt_current_stable] }}"
 
-# components
-apt_components:
-  - main
-
-apt_other_repos:
+# apt_repo_lists are in the "apt_repos.yml" file
 
 # servers to fetch from
 apt_default_repo_path: http://cdn.debian.net/debian/
 apt_security_repo_path: http://security.debian.org/
-
-#apt_release: "{{ apt_default_release }}"
 
 # include repos from testing
 apt_include_testing: true
