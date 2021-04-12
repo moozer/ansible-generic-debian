@@ -61,6 +61,14 @@ apt_security_repo_path: http://security.debian.org/
 # include repos from testing
 apt_include_testing: true
 
+# add local repo
+apt_local_repo_enable: false
+apt_local_repo_list: 
+- "deb http://localserver/ buster compA"
+- "deb http://localserver/ buster compB"
+apt_local_repo_key_url: http://localserver/pubkey.gpg
+apt_local_repo_list_file: localrepo
+
 #
 # defaults for handling firewall rules
 #

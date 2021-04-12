@@ -7,6 +7,11 @@
   when: generic_manage_apt
   tags: apt
 
+- name: add local repo
+  import_tasks: add_local_apt_repo.yml
+  when: generic_manage_apt && apt_use_local_repo
+  tags: apt
+
 - name: installing unattended upgrades
   import_tasks: unattended-upgrades.yml
   when: generic_manage_unattended_upgrade

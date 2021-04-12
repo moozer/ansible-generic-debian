@@ -1,0 +1,25 @@
+
+- name: evaluate keep/remove
+  set_fact:
+   state: "{{ 'present' if apt_local_repo_enable else 'absent' }}"
+
+- name: add/remove local repo key
+  apt_key:
+    url: "{{ apt_local_repo_key_url }}"
+    state: "{{ state }}"
+  register: apt_key_result
+  failed_when: apt_key_result.failed and not state == "absent"
+
+- name: add/remove riot repo
+  apt_repository:
+    repo: "{{ item }}"
+    state: "{{ state }}"
+    filename: "{{ apt_local_repo_list_file }}"
+  register: ws_local_repo_return
+  with_items: "{{ apt_local_repo_list }}"
+
+- name: update apt packages
+  apt:  update_cache=yes
+  when: ws_local_repo_return.changed
+  tags: skip_ansible_lint
+
