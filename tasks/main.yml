@@ -9,7 +9,7 @@
 
 - name: add local repo
   import_tasks: add_local_apt_repo.yml
-  when: generic_manage_apt && apt_use_local_repo
+  when: generic_manage_apt and apt_local_repo_enable
   tags: apt
 
 - name: installing unattended upgrades
