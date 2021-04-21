@@ -15,3 +15,8 @@
 
 - name: restart sshd
   service: name=sshd state=restarted
+
+- name: restart unattended upgrades
+  service:
+    name: unattended-upgrades
+    state: restarted
