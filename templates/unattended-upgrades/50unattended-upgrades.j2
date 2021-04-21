@@ -1,14 +1,24 @@
 Unattended-Upgrade::Origins-Pattern {
+	// enable security updates
 	"{{ unattended_security_origin[ apt_default_release]}}";
 
 {% if unattended_include_debian_repos %}
+	// enable generic debian updates
 	"o=Debian,l=Debian";
 {% else %}
 	// not automatically upgrading from all debian repos
 	// "o=Debian,l=Debian";
 {% endif %}
 
+{% if apt_local_repo_unattended_include %}
+	// upgrade from local repo
+	"{{ apt_local_repo_unattended_origin }}";
+{% else %}
+	// not automatically upgrading from local repo (if exists)
+{% endif %}
+
 {%- if unattended_include_other_repos %}
+	// upgrade from other repos
 	{% for origin in unattended_include_other_repos %}
 	"{{ origin }}";
 	{% endfor %}

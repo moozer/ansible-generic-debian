@@ -6,10 +6,7 @@
 generic_manage_unattended_upgrade: true
 
 # install all debian updates? security updates are always included
-unattended_include_debian_repos: true
-
-# if a local repos is available, upgrade from it?
-unattended_include_local_repos: true
+unattended_include_debian_repos: false
 
 # autoinstall from other repos?
 unattended_include_other_repos:
@@ -72,6 +69,8 @@ apt_local_repo_list:
 - "deb http://localserver/ buster compB"
 apt_local_repo_key_url: http://localserver/pubkey.gpg
 apt_local_repo_list_file: localrepo
+apt_local_repo_unattended_include: false
+apt_local_repo_unattended_origin: "o=something,l=more"
 
 #
 # defaults for handling firewall rules
