@@ -5,6 +5,15 @@
 # unattended upgrades
 generic_manage_unattended_upgrade: true
 
+# install all debian updates? security updates are always included
+unattended_include_debian_repos: true
+
+# if a local repos is available, upgrade from it?
+unattended_include_local_repos: true
+
+# autoinstall from other repos?
+unattended_include_other_repos:
+
 # for ldap
 generic_manage_ldap: false
 ldap_uri: ldap://someldapserver
