@@ -36,7 +36,8 @@
   - /etc/apt/sources.list.d/security_debian_org.list
 
 - name: update apt packages
-  apt: update_cache=yes
+  apt: 
+    update_cache: yes
   when:    apt_repo_buster_return.changed
         or apt_repo_bullseye_return.changed
 

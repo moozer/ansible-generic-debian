@@ -3,12 +3,12 @@
 # installs the package and configures upgrading of
 # normal and security updates
 #
-# No variables
+
 
 - name: installing unattended-upgrade related packages
-  apt: name={{ item }} state=present
-  with_items:
-  - unattended-upgrades
+  apt: 
+    name: unattended-upgrades
+    state: present
   tags: apt
 
 - name: Configuring unattended upgrade
