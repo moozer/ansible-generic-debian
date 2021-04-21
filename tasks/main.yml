@@ -15,7 +15,9 @@
 - name: installing unattended upgrades
   import_tasks: unattended-upgrades.yml
   when: generic_manage_unattended_upgrade
-  tags: apt
+  tags: 
+  - apt
+  - unattended_upgrades
 
 - name: add ldap config
   import_tasks: add_ldap.yml
