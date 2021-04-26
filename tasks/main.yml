@@ -41,3 +41,8 @@
 - import_tasks: network.yml
   when: generic_manage_network
   tags: network
+
+- import_tasks: cleanup_tasks.yml
+  tags:
+  - never
+  - cleanup

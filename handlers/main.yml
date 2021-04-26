@@ -20,3 +20,7 @@
   service:
     name: unattended-upgrades
     state: restarted
+
+- name: update apt cache
+  apt:
+    update_cache: true

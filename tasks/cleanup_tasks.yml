@@ -1,0 +1,30 @@
+# collection of task from old ways of doing things...
+
+- name: "remove old sources file (not used anymore)"
+  file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+  - /etc/apt/sources.list
+  - /etc/apt/sources.list.d/cdn_debian_net_debian.list
+  - /etc/apt/sources.list.d/security_debian_org.list
+
+- name: remove buster repos
+  apt_repository:
+    repo: "{{ item }}"
+    state: absent
+    update_cache: false
+    filename: debian-buster
+  with_items: "{{ apt_repo_list_buster }}"
+  when: "'buster' not in apt_repo_releases"
+  notify: update apt cache
+
+- name: remove bullseye repos
+  apt_repository:
+    repo: "{{ item }}"
+    state: absent
+    update_cache: false
+    filename: debian-bullseye
+  with_items: "{{ apt_repo_list_bullseye }}"
+  when: "'bullseye' not in apt_repo_releases"
+  notify: update apt cache

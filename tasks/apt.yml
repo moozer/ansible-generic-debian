@@ -11,29 +11,23 @@
 - name: add buster repos
   apt_repository:
     repo: "{{ item }}"
-    state: "{{ 'present' if 'buster' in apt_repo_releases else 'absent' }}"
+    state: present
     update_cache: false
     filename: debian-buster
   with_items: "{{ apt_repo_list_buster }}"
+  when: "'buster' in apt_repo_releases"
   register: apt_repo_buster_return
 
+# see cleanup_task. for removal
 - name: add bullseye repos
   apt_repository:
     repo: "{{ item }}"
-    state: "{{ 'present' if 'bullseye' in apt_repo_releases else 'absent' }}"
+    state: present
     update_cache: false
     filename: debian-bullseye
   with_items: "{{ apt_repo_list_bullseye }}"
+  when: "'bullseye' in apt_repo_releases"
   register: apt_repo_bullseye_return
-
-- name: "remove old sources file (not used anymore)"
-  file:
-    state: absent
-    path: "{{ item }}"
-  with_items:
-  - /etc/apt/sources.list
-  - /etc/apt/sources.list.d/cdn_debian_net_debian.list
-  - /etc/apt/sources.list.d/security_debian_org.list
 
 - name: update apt packages
   apt: 
