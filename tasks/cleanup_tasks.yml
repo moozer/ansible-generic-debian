@@ -8,6 +8,7 @@
   - /etc/apt/sources.list
   - /etc/apt/sources.list.d/cdn_debian_net_debian.list
   - /etc/apt/sources.list.d/security_debian_org.list
+  notify: update apt cache
 
 - name: remove buster repos
   apt_repository:
