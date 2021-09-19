@@ -37,7 +37,7 @@
 
 - name: install apt security sources stable ({{ apt_current_stable }})
   apt_repository:
-    repo: 'deb {{apt_security_repo_path}} {{ apt_current_stable }}/updates {{ item }}'
+    repo: 'deb {{apt_security_repo_path}} {{ apt_current_stable }}-security {{ item }}'
     state: present
     update_cache: false
   with_items: "{{apt_components}}"
@@ -45,7 +45,7 @@
 
 - name: install apt security sources testing ({{apt_current_testing}})
   apt_repository:
-    repo: 'deb {{apt_security_repo_path}} {{apt_current_testing}}/updates {{ item }}'
+    repo: 'deb {{apt_security_repo_path}} {{apt_current_testing}}-security {{ item }}'
     state: present
     update_cache: false
   with_items: "{{apt_components}}"
