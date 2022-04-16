@@ -52,6 +52,7 @@ apt_current_testing: stretch
 apt_current_stable: jessie
 apt_default_release: "{{apt_current_stable}}"
 apt_repo_releases: "{{ [apt_current_testing, apt_current_stable] if  apt_include_testing else [apt_current_stable] }}"
+apt_repo_extra_files_to_remove: []  # old non-standard repo files to be removed
 
 # apt_repo_lists are in the "apt_repos.yml" file
 

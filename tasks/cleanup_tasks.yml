@@ -4,10 +4,17 @@
   file:
     state: absent
     path: "{{ item }}"
-  with_items:
+  loop:
   - /etc/apt/sources.list
   - /etc/apt/sources.list.d/cdn_debian_net_debian.list
   - /etc/apt/sources.list.d/security_debian_org.list
+  notify: update apt cache
+
+- name: "remove extra old sources file"
+  file:
+    state: absent
+    path: "/etc/apt/sources.list.d/{{ item }}"
+  loop: "{{ apt_repo_extra_files_to_remove }}"
   notify: update apt cache
 
 - name: remove buster repos
