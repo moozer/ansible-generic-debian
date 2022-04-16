@@ -1,0 +1,48 @@
+# in order to do dist upgrade or just upgrade, we do
+# 1. ordinary upgrade with what we have
+# 2. update apt-related config files and such
+# 3. dist upgrade
+# 4. cleanup
+
+
+- name: check distribution
+  debug:
+    msg:
+    - "Current release {{ ansible_facts['lsb']['codename']}}"
+    - "Next release: {{ apt_default_release }}"
+
+# 1. upgrade system
+
+- name: apt-get upgrade
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+    upgrade: yes
+    default_release: "{{ ansible_facts['lsb']['codename']}}"
+
+# 2. update config files
+- name: add repositories and update
+  import_tasks: apt.yml
+  when: generic_manage_apt
+  
+- name: add local repo
+  import_tasks: add_local_apt_repo.yml
+  when: generic_manage_apt and apt_local_repo_enable
+  
+- name: installing unattended upgrades
+  import_tasks: unattended-upgrades.yml
+  when: generic_manage_unattended_upgrade
+
+# 3. dist upgrade
+- name: dist upgrade
+  apt:
+    upgrade: dist
+
+# 4. cleanup
+- name: apt clean
+  apt:
+    autoremove: true
+    autoclean: true
+
+# remove old repos
+- import_tasks: cleanup_tasks.yml
