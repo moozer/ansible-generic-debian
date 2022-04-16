@@ -29,3 +29,14 @@
   with_items: "{{ apt_repo_list_bullseye }}"
   when: "'bullseye' not in apt_repo_releases"
   notify: update apt cache
+
+- name: remove bookworm repos
+  apt_repository:
+    repo: "{{ item }}"
+    state: absent
+    update_cache: false
+    filename: debian-bookworm
+  with_items: "{{ apt_repo_list_bookworm }}"
+  when: "'bookworm' not in apt_repo_releases"
+  notify: update apt cache
+  

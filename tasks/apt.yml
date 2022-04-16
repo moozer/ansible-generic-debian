@@ -29,11 +29,22 @@
   when: "'bullseye' in apt_repo_releases"
   register: apt_repo_bullseye_return
 
+- name: add bookworm repos
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+    update_cache: false
+    filename: debian-bookworm
+  with_items: "{{ apt_repo_list_bookworm }}"
+  when: "'bookworm' in apt_repo_releases"
+  register: apt_repo_bookworm_return
+
 - name: update apt packages
   apt: 
     update_cache: yes
   when:    apt_repo_buster_return.changed
         or apt_repo_bullseye_return.changed
+        or apt_repo_bookworm_return.changed
 
 - name: apt configurations
   template: src=apt.conf.j2 dest="/etc/apt/apt.conf"
