@@ -18,7 +18,6 @@
     update_cache: yes
     cache_valid_time: 3600
     upgrade: yes
-    default_release: "{{ ansible_facts['lsb']['codename']}}"
 
 # 2. update config files
 - name: add repositories and update
