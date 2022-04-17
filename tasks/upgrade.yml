@@ -10,6 +10,7 @@
     msg:
     - "Current release {{ ansible_facts['lsb']['codename']}}"
     - "Next release: {{ apt_default_release }}"
+    - "Releases included {{ apt_repo_releases }}"
 
 # 1. upgrade system
 
