@@ -11,6 +11,8 @@ apt_repo_list_bullseye:
 apt_repo_list_bookworm:
 - deb http://cdn.debian.net/debian/ bookworm main
 
+apt_repo_list_sid:
+- deb http://cdn.debian.net/debian/ sid main
 
 unattended_security_origin:
   bullseye: "o=Debian,n=bullseye-security,l=Debian-Security"
