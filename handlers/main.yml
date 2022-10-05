@@ -8,7 +8,9 @@
   service: name=exim4 state=reloaded
 
 - name: reapply iptables
-  service: name=iptables state=reloaded
+  service: 
+    name: iptables
+    state: restarted
 
 - name: reapply ip6tables
   service: name=ip6tables state=reloaded
