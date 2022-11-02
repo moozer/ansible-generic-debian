@@ -2,6 +2,21 @@
 #
 #
 
+- name: check distribution
+  fail:
+    msg:
+    - "release mismatch"
+    - "please run with -t apt_upgrade"
+    - "{{ apt_default_release }} != {{ ansible_facts['lsb']['codename']}}"
+  when: apt_default_release != ansible_facts['lsb']['codename'] 
+  tags: apt
+
+- name: upgrade
+  import_tasks: upgrade.yml
+  tags:
+  - never
+  - apt_upgrade
+
 - name: add repositories and update
   import_tasks: apt.yml
   when: generic_manage_apt
