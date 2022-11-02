@@ -3,6 +3,13 @@
   set_fact:
    state: "{{ 'present' if apt_local_repo_enable else 'absent' }}"
 
+- name: Remove old repo keys
+  ansible.builtin.apt_key:
+    id: "{{ item }}"
+    state: absent
+  loop:
+  - 3E05D01925578374
+
 - name: add/remove local repo key
   apt_key:
     url: "{{ apt_local_repo_key_url }}"
