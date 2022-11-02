@@ -12,12 +12,22 @@
   tags: apt
 
 - name: Configuring unattended upgrade
-  template: src=unattended-upgrades/50unattended-upgrades.j2 dest=/etc/apt/apt.conf.d/50unattended-upgrades
+  template: 
+    src: unattended-upgrades/50unattended-upgrades.j2
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
   tags: apt
   notify: restart unattended upgrades
 
 - name: Configuring periodic updates
-  template: src=unattended-upgrades/20auto-upgrades.j2 dest=/etc/apt/apt.conf.d/20auto-upgrades
+  template: 
+    src: unattended-upgrades/20auto-upgrades.j2
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
   tags: apt
   notify: restart unattended upgrades
-  
+
+- name: test unattended updates
+  shell: "unattended-upgrades --dry-run"
+  changed_when: false
+  tags:
+  - never
+  - test
