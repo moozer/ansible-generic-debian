@@ -1,6 +1,6 @@
 Unattended-Upgrade::Origins-Pattern {
 	// enable security updates
-	"{{ unattended_security_origin[ apt_default_release]}}";
+	"{{ unattended_security_origin[apt_default_release]}}";
 
 {% if unattended_include_debian_repos %}
 	// enable generic debian updates
