@@ -96,7 +96,7 @@ Add users with special permission
 
 ```
 sshd_users:
-  - { username: "{{ansible_ssh_user}}", AllowTcpForwarding: "yes", PermitTTY: "yes" }
+  - { username: "{{ansible_user}}", AllowTcpForwarding: "yes", PermitTTY: "yes" }
 ```
 
 This is a list, and may be more than one entry. The options and the associated value is copied directly to the `sshd_config` file. Default is to disallow ttys and forwarding - ie. not very usefull. See `an sshd_config` for the list of options
