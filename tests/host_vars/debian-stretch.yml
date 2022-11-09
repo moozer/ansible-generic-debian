@@ -15,4 +15,4 @@ interfaces:
 generic_manage_network: true
 
 sshd_users:
-  - { username: "{{ansible_ssh_user}}", AllowTcpForwarding: "yes", PermitTTY: "yes" }
+  - { username: "{{ansible_user}}", AllowTcpForwarding: "yes", PermitTTY: "yes" }
