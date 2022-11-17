@@ -38,6 +38,32 @@
   when: "'bookworm' in apt_repo_releases"
   register: apt_repo_bookworm_return
 
+- name: install apt security sources testing ({{apt_current_testing}})
+  apt_repository:
+    repo: 'deb {{apt_security_repo_path}} {{ apt_current_stable }}-security {{ item }}'
+    state: present
+    update_cache: false
+  with_items: "{{apt_components}}"
+  register: apt_repo_stable_sec_return
+
+- name: install apt security sources testing ({{apt_current_testing}})
+  apt_repository:
+    repo: 'deb {{apt_security_repo_path}} {{apt_current_testing}}-security {{ item }}'
+    state: present
+    update_cache: false
+  with_items: "{{apt_components}}"
+  register: apt_repo_testing_sec_return
+  when: apt_include_testing
+
+- name: install other apt sources
+  apt_repository:
+    repo: '{{ item }}'
+    state: present
+    update_cache: false
+  with_items: "{{apt_other_repos}}"
+  when: not apt_other_repos is none
+  register: apt_repo_other_return
+
 - name: add sid repos
   apt_repository:
     repo: "{{ item }}"
