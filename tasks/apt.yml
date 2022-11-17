@@ -8,34 +8,37 @@
 #    apt-get install debian-archive-keyring
 # also check for stale apt-pinning
 
-- name: install apt sources stable ({{ apt_current_stable }})
+- name: add buster repos
   apt_repository:
-    repo: 'deb {{apt_default_repo_path}} {{ apt_current_stable }} {{ item }}'
+    repo: "{{ item }}"
     state: present
     update_cache: false
-  with_items: "{{apt_components}}"
-  register: apt_repo_stable_return
+    filename: debian-buster
+  with_items: "{{ apt_repo_list_buster }}"
+  when: "'buster' in apt_repo_releases"
+  register: apt_repo_buster_return
 
-- name: install apt sources stable ({{ apt_current_stable }}) for updates and backports
+- name: add bullseye repos
   apt_repository:
-    repo: 'deb {{apt_default_repo_path}} {{ apt_current_stable }}-{{ item }} main'
+    repo: "{{ item }}"
     state: present
     update_cache: false
-  with_items:
-  - "updates"
-  - "backports"
-  register: apt_repo_stable_updates_return
+    filename: debian-bullseye
+  with_items: "{{ apt_repo_list_bullseye }}"
+  when: "'bullseye' in apt_repo_releases"
+  register: apt_repo_bullseye_return
 
-- name: install apt sources testing ({{apt_current_testing}})
+- name: add bookworm repos
   apt_repository:
-    repo: 'deb {{apt_default_repo_path}} {{apt_current_testing}} {{ item }}'
+    repo: "{{ item }}"
     state: present
     update_cache: false
-  with_items: "{{apt_components}}"
-  register: apt_repo_testing_return
-  when: apt_include_testing
+    filename: debian-bookworm
+  with_items: "{{ apt_repo_list_bookworm }}"
+  when: "'bookworm' in apt_repo_releases"
+  register: apt_repo_bookworm_return
 
-- name: install apt security sources stable ({{ apt_current_stable }})
+- name: install apt security sources testing ({{apt_current_testing}})
   apt_repository:
     repo: 'deb {{apt_security_repo_path}} {{ apt_current_stable }}-security {{ item }}'
     state: present
@@ -61,14 +64,23 @@
   when: not apt_other_repos is none
   register: apt_repo_other_return
 
+- name: add sid repos
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+    update_cache: false
+    filename: debian-sid
+  with_items: "{{ apt_repo_list_sid }}"
+  when: "'sid' in apt_repo_releases"
+  register: apt_repo_sid_return
+
 - name: update apt packages
-  apt: update_cache=yes
-  when:    apt_repo_stable_return.changed
-        or apt_repo_stable_updates_return.changed
-        or apt_repo_stable_sec_return.changed
-        or (apt_repo_other_return is defined and apt_repo_other_return.changed)
-        or (apt_repo_testing_return.changed and apt_include_testing)
-        or (apt_repo_testing_sec_return.changed and apt_include_testing)
+  apt: 
+    update_cache: yes
+  when:    apt_repo_buster_return.changed
+        or apt_repo_bullseye_return.changed
+        or apt_repo_bookworm_return.changed
+        or apt_repo_sid_return.changed
 
 - name: apt configurations
   template: src=apt.conf.j2 dest="/etc/apt/apt.conf"

@@ -5,6 +5,12 @@
 # unattended upgrades
 generic_manage_unattended_upgrade: true
 
+# install all debian updates? security updates are always included
+unattended_include_debian_repos: false
+
+# autoinstall from other repos?
+unattended_include_other_repos:
+
 # for ldap
 generic_manage_ldap: false
 ldap_uri: ldap://someldapserver
@@ -45,21 +51,29 @@ generic_manage_apt: true
 apt_current_testing: stretch
 apt_current_stable: jessie
 apt_default_release: "{{apt_current_stable}}"
+apt_repo_releases: "{{ [apt_current_testing, apt_current_stable] if  apt_include_testing else [apt_current_stable] }}"
 
-# components
-apt_components:
-  - main
+# old non-standard repo files to be removed from /etc/apt/sources.list.d
+apt_repo_extra_files_to_remove: [] 
 
-apt_other_repos:
+# apt_repo_lists are in the "apt_repos.yml" file
 
 # servers to fetch from
 apt_default_repo_path: http://cdn.debian.net/debian/
 apt_security_repo_path: http://security.debian.org/
 
-#apt_release: "{{ apt_default_release }}"
-
 # include repos from testing
 apt_include_testing: true
+
+# add local repo
+apt_local_repo_enable: false
+apt_local_repo_list: 
+- "deb http://localserver/ buster compA"
+- "deb http://localserver/ buster compB"
+apt_local_repo_key_url: http://localserver/pubkey.gpg
+apt_local_repo_list_file: localrepo
+apt_local_repo_unattended_include: false
+apt_local_repo_unattended_origin: "o=something,l=more"
 
 #
 # defaults for handling firewall rules
@@ -76,7 +90,7 @@ firewall_drop_all_ip4: false
 # e.g firewall_allow_all_output_network: 0.0.0.0/0
 firewall_allow_all_output_network:
 
-# Limit SMTP, DNS and so on to acces this network only
+# Limit SMTP, DNS and so on to access this network only
 firewall_server_network: 0.0.0.0/0
 # add rules to allow dhcp
 firewall_allow_dhcp: true
@@ -100,9 +114,9 @@ firewall_incoming_services: []
 generic_manage_sshd: true
 
 # flags for the users:
-# warning: Yes and yes is not the same. Use "yes" or "no" - lowercase and with quotes
+# warning: Yes and yes are not the same. Use "yes" or "no" - lowercase and with quotes
 sshd_users:
-  - { username: "{{ansible_ssh_user}}", AllowTcpForwarding: "yes", PermitTTY: "yes" }
+  - { username: "{{ansible_user}}", AllowTcpForwarding: "yes", PermitTTY: "yes" }
 
 #
 # defaults for handling networks
