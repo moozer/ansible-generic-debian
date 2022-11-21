@@ -1,0 +1,22 @@
+- name: add certs from lists
+  copy: 
+    content: "{{ item.value }}" 
+    dest: "/usr/local/share/ca-certificates/{{ item.key }}.crt"
+    mode: 0644
+    owner: root
+    group: root
+  loop: "{{ generic_ca_certs | dict2items }}"
+  register: add_certs_output
+
+# TODO: add removal of ca certs
+# - name: remove certs
+
+#   "{{ item.key }} - {{ item.value }}"
+#   tags: cleanup
+
+- name: apply changes
+  command: update-ca-certs
+  register: update_ca_output
+  # just guessing
+  changed_when: update_ca_output.stdout | regex_search("^{1-9}\d") 
+  when: add_certs_output.changed

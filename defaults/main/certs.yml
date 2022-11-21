@@ -1,0 +1,13 @@
+# add custom ca certificates
+# generic_ca_certs:
+# - some_cert: |
+#   -----BEGIN CERTIFICATE-----
+#   ....
+# generic_ca_certs_remove:
+# - some_cert # note: without .crt
+
+generic_manage_ca_certs: false
+
+# default is empty certs
+generic_ca_certs:
+generic_ca_certs_remove:
