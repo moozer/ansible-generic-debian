@@ -11,13 +11,12 @@
 
 # TODO: add removal of ca certs
 # - name: remove certs
-
-#   "{{ item.key }} - {{ item.value }}"
+#   ...
 #   tags: cleanup
 
 - name: apply changes
-  command: update-ca-certs
+  command: /usr/sbin/update-ca-certificates
   register: update_ca_output
-  # just guessing
-  changed_when: update_ca_output.stdout | regex_search("^{1-9}\d") 
+  # TODO: add proper changed_when logic
+  # changed_when: update_ca_output.stdout | regex_search("^{1-9}\d") 
   when: add_certs_output.changed
