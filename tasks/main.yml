@@ -11,9 +11,6 @@
   when: apt_default_release != ansible_facts['lsb']['codename'] 
   tags: apt
 
-- debug: var=generic_manage_ca_certs
-  tags:
-  - update_certs
 - name: update ca certs
   import_tasks: ca_certs.yml
   when: generic_manage_ca_certs

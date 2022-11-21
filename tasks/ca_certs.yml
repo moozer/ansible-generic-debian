@@ -6,6 +6,7 @@
     owner: root
     group: root
   loop: "{{ generic_ca_certs | dict2items }}"
+  when: "{{ generic_ca_certs is defined }}"
   register: add_certs_output
 
 # TODO: add removal of ca certs
