@@ -47,7 +47,7 @@ iptables -A INPUT  -p tcp -d {{ firewall_server_network }} --dport 22 \
 iptables -A OUTPUT -p tcp -d {{ firewall_server_network }} --sport 22 \
          -m state --state NEW \
          -j ACCEPT \
-         -m comment --comment "SSH incoming from {{ firewall_server_network }} - no limit"
+         -m comment --comment "SSH outgoing from {{ firewall_server_network }} - no limit"
 {% else %}
 iptables -A INPUT  -p tcp --dport 22 \
          -m state --state NEW \
