@@ -60,8 +60,8 @@
     repo: '{{ item }}'
     state: present
     update_cache: false
-  with_items: "{{apt_other_repos}}"
-  when: not apt_other_repos is none
+  with_items: "{{ apt_other_repos }}"
+  when: not apt_other_repos is undefined
   register: apt_repo_other_return
 
 - name: add sid repos
